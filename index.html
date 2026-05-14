@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Aspire Kids — Building Tomorrow's Leaders, Today</title>
+<meta name="description" content="The Aspire Kids equips children aged 6–16 with entrepreneurship, financial literacy, AI literacy, design thinking and communication skills through books, school programs, workshops and mentorship.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sun:#FFC837; --sun-d:#D99F00; --sun-l:#FFF7DC;
+  --fire:#FF6B2C; --fire-d:#C84B10; --fire-l:#FFE9DC;
+  --teal:#00B8A9; --teal-d:#007F74; --teal-l:#D0F5F2;
+  --grape:#7C3AED; --grape-d:#5B21B6; --grape-l:#EDE9FE;
+  --rose:#F43F5E; --rose-d:#BE123C; --rose-l:#FFE4E9;
+  --navy:#071A3E; --navy-light:#0F2D6B;
+  --ink:#181420; --body:#3D3650; --muted:#9490A8;
+  --border:#EDE9DC; --surface:#FAFAF6; --white:#FFFFFF; --cream:#FFF8EC;
+  --r-sm:10px; --r-md:18px; --r-lg:28px; --r-xl:44px;
+  --shadow-sm:0 2px 12px rgba(24,20,32,.07);
+  --shadow-md:0 6px 28px rgba(24,20,32,.11);
+  --shadow-lg:0 16px 56px rgba(24,20,32,.16);
+  --shadow-hard:4px 5px 0 rgba(24,20,32,.12);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--surface);color:var(--body);overflow-x:hidden}
+
+/* ── CURSOR ── */
+body{cursor:none}
+#cur,#curR{position:fixed;border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%)}
+#cur{width:12px;height:12px;background:var(--fire);mix-blend-mode:multiply;transition:width .15s,height .15s}
+#curR{width:36px;height:36px;border:2px solid var(--fire);opacity:.45;transition:all .1s linear}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--cream)}
+::-webkit-scrollbar-thumb{background:var(--sun);border-radius:6px}
+
+/* ── ZIGZAG ── */
+.zigzag{height:9px;width:100%;background:repeating-linear-gradient(90deg,var(--sun) 0,var(--sun) 14px,var(--fire) 14px,var(--fire) 28px,var(--teal) 28px,var(--teal) 42px,var(--grape) 42px,var(--grape) 56px,var(--rose) 56px,var(--rose) 70px)}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  height:68px;background:rgba(250,250,246,.96);
+  backdrop-filter:blur(18px) saturate(1.4);
+  border-bottom:2px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(16px,4vw,60px);transition:box-shadow .3s;
+}
+nav.scrolled{box-shadow:var(--shadow-md)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--sun),var(--fire));display:flex;align-items:center;justify-content:center;font-size:1.25rem;box-shadow:var(--shadow-hard);flex-shrink:0}
+.logo-text{font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:var(--ink);letter-spacing:-.3px;line-height:1}
+.logo-text span{color:var(--fire)}
+.logo-sub{font-size:.55rem;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);display:block;margin-top:1px}
+.nav-links{list-style:none;display:flex;align-items:center;gap:1px}
+.nav-links a{font-weight:700;font-size:.85rem;color:var(--body);text-decoration:none;padding:7px 12px;border-radius:50px;transition:all .2s;white-space:nowrap}
+.nav-links a:hover{background:var(--cream);color:var(--ink)}
+.nav-cta{background:linear-gradient(135deg,var(--sun),var(--fire));color:var(--ink)!important;border-radius:50px!important;padding:9px 20px!important;box-shadow:3px 4px 0 var(--fire-d)!important;font-weight:800!important;transition:transform .2s,box-shadow .2s!important}
+.nav-cta:hover{transform:translateY(-2px)!important;box-shadow:3px 7px 0 var(--fire-d)!important}
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px}
+.ham span{width:22px;height:2.5px;background:var(--ink);border-radius:2px;display:block;transition:.3s}
+.mob-nav{display:none;position:fixed;top:68px;left:0;right:0;background:var(--white);border-bottom:2px solid var(--border);padding:12px;z-index:899;flex-direction:column;gap:3px;box-shadow:var(--shadow-md)}
+.mob-nav.open{display:flex}
+.mob-nav a{font-weight:700;color:var(--body);text-decoration:none;padding:11px 14px;border-radius:var(--r-sm);transition:.2s}
+.mob-nav a:hover{background:var(--cream);color:var(--ink)}
+
+/* ── WHATSAPP FLOAT ── */
+.wa-float{position:fixed;bottom:80px;right:22px;z-index:800;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;font-size:1.5rem;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,.45);transition:transform .25s,box-shadow .25s}
+.wa-float:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 10px 28px rgba(37,211,102,.55)}
+
+/* ── STICKY BAR ── */
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:800;background:white;border-top:2px solid var(--border);padding:10px clamp(16px,5vw,60px);display:flex;align-items:center;justify-content:space-between;box-shadow:0 -6px 24px rgba(24,20,32,.1);transform:translateY(100%);transition:transform .4s ease;flex-wrap:wrap;gap:10px}
+.sticky-bar.show{transform:translateY(0)}
+.sb-info strong{font-size:.93rem;color:var(--ink)}
+.sb-info p{font-size:.76rem;color:var(--muted);margin-top:1px}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.section{padding:92px 0}
+.inner{max-width:1240px;margin:0 auto;padding:0 clamp(16px,5vw,60px)}
+.sec-label{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:50px;margin-bottom:14px}
+.sec-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(1.9rem,4vw,3rem);color:var(--ink);line-height:1.15;margin-bottom:12px}
+.sec-desc{font-size:1rem;line-height:1.82;color:var(--body);max-width:580px}
+.t-center{text-align:center}
+.t-center .sec-desc{margin:0 auto}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+.wave{overflow:hidden;line-height:0;display:block}
+.wave svg{display:block;width:100%}
+
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;padding:13px 26px;border-radius:50px;text-decoration:none;border:none;cursor:none;transition:transform .22s,box-shadow .22s}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{background:linear-gradient(135deg,var(--fire),var(--rose));color:white;box-shadow:4px 5px 0 var(--fire-d)}
+.btn-primary:hover{box-shadow:4px 8px 0 var(--fire-d)}
+.btn-secondary{background:var(--white);color:var(--ink);border:2.5px solid var(--border);box-shadow:var(--shadow-sm)}
+.btn-secondary:hover{border-color:var(--fire);color:var(--fire);box-shadow:var(--shadow-md)}
+.btn-teal{background:linear-gradient(135deg,var(--teal),#00967E);color:white;box-shadow:4px 5px 0 var(--teal-d)}
+.btn-teal:hover{box-shadow:4px 8px 0 var(--teal-d)}
+.btn-navy{background:linear-gradient(135deg,var(--navy),var(--navy-light));color:white;box-shadow:4px 5px 0 rgba(0,0,0,.3)}
+.btn-navy:hover{box-shadow:4px 8px 0 rgba(0,0,0,.4)}
+.btn-sun{background:linear-gradient(135deg,var(--sun),var(--fire));color:var(--ink);box-shadow:4px 5px 0 var(--sun-d)}
+.btn-sun:hover{box-shadow:4px 8px 0 var(--sun-d)}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;min-height:100vh;overflow:hidden;display:flex;align-items:center;padding:88px clamp(16px,6vw,80px) 60px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 75% 65% at 75% 40%,#FFF2CC 0%,transparent 55%),radial-gradient(ellipse 55% 75% at 5% 70%,#FFE5D0 0%,transparent 50%),radial-gradient(ellipse 40% 40% at 90% 10%,#D0F5F2 0%,transparent 45%),var(--cream)}
+.hero-blob{position:absolute;border-radius:50%;opacity:.18;pointer-events:none}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;max-width:1240px;margin:0 auto;width:100%}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;background:white;border:2px solid var(--border);border-radius:50px;padding:6px 18px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--fire);margin-bottom:20px;box-shadow:var(--shadow-sm);animation:riseUp .6s ease both}
+.hero-title{font-family:'Baloo 2',cursive;font-size:clamp(2.6rem,5vw,4.6rem);font-weight:800;line-height:1.08;color:var(--ink);margin-bottom:16px;animation:riseUp .7s .1s ease both}
+.hero-title .wave-under{display:inline-block;position:relative;color:var(--fire)}
+.hero-title .wave-under::after{content:'';position:absolute;bottom:-6px;left:0;right:0;height:6px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12'%3E%3Cpath d='M0 6 Q12.5 0 25 6 Q37.5 12 50 6 Q62.5 0 75 6 Q87.5 12 100 6' stroke='%23FFC837' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x center}
+.hero-desc{font-size:1.08rem;line-height:1.8;color:var(--body);max-width:520px;margin-bottom:30px;animation:riseUp .7s .2s ease both}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;animation:riseUp .7s .3s ease both;margin-bottom:32px}
+.hero-stats{display:flex;gap:12px;flex-wrap:wrap;animation:riseUp .7s .4s ease both}
+.hstat{background:white;border:2px solid var(--border);border-radius:50px;padding:7px 16px;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-sm)}
+.hstat-num{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.1rem;color:var(--ink)}
+.hstat-label{font-size:.76rem;font-weight:700;color:var(--muted)}
+.hero-right{position:relative;display:flex;justify-content:center;align-items:center;animation:riseUp .8s .15s ease both}
+.book-stage{position:relative;width:320px;height:420px}
+.ann{position:absolute;background:white;border-radius:var(--r-md);padding:10px 16px;box-shadow:var(--shadow-lg);border:2px solid var(--border);font-weight:800;font-size:.82rem;color:var(--ink);display:flex;align-items:center;gap:8px;animation:float 5s ease-in-out infinite;white-space:nowrap;z-index:10}
+.ann-1{top:4%;right:-14%;animation-delay:0s}
+.ann-2{bottom:28%;left:-16%;animation-delay:1.8s}
+.ann-3{bottom:8%;right:-10%;animation-delay:1s}
+
+/* ── TICKER ── */
+.ticker-wrap{background:var(--sun);padding:12px 0;overflow:hidden;white-space:nowrap}
+.ticker-inner{display:inline-block;animation:ticker 36s linear infinite}
+.ticker-item{display:inline-block;font-family:'Baloo 2',cursive;font-weight:800;font-size:.9rem;color:var(--ink);padding:0 28px}
+.ticker-item::before{content:'★  '}
+
+/* ============================================================
+   WHY WE EXIST
+   ============================================================ */
+.why-section{background:var(--white)}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.why-stat-block{background:linear-gradient(135deg,var(--ink),#2D2648);border-radius:var(--r-lg);padding:32px;margin-bottom:18px;position:relative;overflow:hidden}
+.why-stat-block::after{content:'';position:absolute;top:-30px;right:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,199,55,.12)}
+.why-big-num{font-family:'Baloo 2',cursive;font-size:3.8rem;font-weight:800;color:var(--sun);line-height:1}
+.why-big-label{font-size:.97rem;color:rgba(255,255,255,.68);margin-top:8px;line-height:1.6}
+.crisis-cards{display:flex;flex-direction:column;gap:14px}
+.crisis-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-md);padding:20px;display:flex;gap:14px;align-items:flex-start;transition:all .25s}
+.crisis-card:hover{border-color:var(--sun);transform:translateX(4px)}
+.crisis-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.crisis-title{font-family:'Baloo 2',cursive;font-size:1rem;color:var(--ink);margin-bottom:4px}
+.crisis-text{font-size:.87rem;color:var(--body);line-height:1.6}
+.pptx-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.pptx-stat{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-md);padding:18px;text-align:center}
+.pptx-num{font-family:'Baloo 2',cursive;font-size:1.8rem;font-weight:800;color:var(--fire)}
+.pptx-label{font-size:.78rem;color:var(--muted);margin-top:4px;line-height:1.5}
+
+/* ============================================================
+   PROGRAMS OVERVIEW
+   ============================================================ */
+.programs-section{background:var(--cream)}
+.programs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.prog-card{background:var(--white);border-radius:var(--r-lg);overflow:hidden;border:2px solid var(--border);transition:transform .3s,box-shadow .3s}
+.prog-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg)}
+.prog-top{height:190px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+.prog-body{padding:26px}
+.prog-tag{display:inline-block;font-size:.72rem;font-weight:800;padding:3px 12px;border-radius:50px;margin-bottom:10px}
+.prog-title{font-family:'Baloo 2',cursive;font-size:1.2rem;font-weight:800;color:var(--ink);margin-bottom:8px}
+.prog-desc{font-size:.89rem;color:var(--body);line-height:1.7}
+
+/* ============================================================
+   BOOK SECTION
+   ============================================================ */
+.book-section{background:var(--white)}
+.book-inner{display:grid;grid-template-columns:1fr 1fr;gap:68px;align-items:center}
+.book-formats{display:flex;flex-direction:column;gap:14px;margin-top:26px}
+.format-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-lg);padding:20px 22px;display:flex;align-items:flex-start;gap:16px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.format-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--sun)}
+.format-icon{width:52px;height:52px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.format-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.05rem;color:var(--ink);margin-bottom:4px}
+.format-desc{font-size:.87rem;line-height:1.6;color:var(--body)}
+.format-cta{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-weight:800;font-size:.82rem;text-decoration:none;border-radius:50px;padding:7px 16px;border:2px solid;transition:all .2s}
+.book-vis-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.book-glow-ring{position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(255,199,55,.22) 0%,transparent 70%);animation:pulseRing 3.5s ease-in-out infinite}
+.series-badge{position:absolute;top:-18px;right:-4px;background:linear-gradient(135deg,var(--grape),#5B21B6);color:white;border-radius:50px;padding:7px 18px;font-weight:800;font-size:.78rem;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:6px;z-index:5;animation:float 4s ease-in-out infinite}
+
+/* ============================================================
+   BOOK SERIES (5 BOOKS)
+   ============================================================ */
+.series-full-section{background:var(--ink);overflow:hidden;position:relative;padding:92px 0}
+.series-full-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(255,199,55,.09) 0%,transparent 60%)}
+.series-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;position:relative;z-index:1}
+.s-book-card{border-radius:22px;overflow:hidden;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);transition:all .3s;cursor:default}
+.s-book-card:hover{background:rgba(255,255,255,.1);transform:translateY(-6px);border-color:rgba(255,255,255,.2)}
+.s-book-cover{height:210px;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:22px;position:relative}
+.s-book-num{position:absolute;top:12px;left:14px;font-family:'Baloo 2',cursive;font-weight:800;font-size:.78rem;background:rgba(255,255,255,.15);color:rgba(255,255,255,.7);border-radius:50px;padding:2px 10px}
+.s-book-emoji{font-size:3.2rem;margin-bottom:10px}
+.s-book-name{font-family:'Baloo 2',cursive;font-weight:800;font-size:.9rem;text-align:center;color:var(--white);line-height:1.3}
+.s-book-body{padding:18px;border-top:1px solid rgba(255,255,255,.08)}
+.s-book-badge{display:inline-block;font-size:.68rem;font-weight:800;padding:3px 9px;border-radius:50px;background:rgba(255,184,0,.18);color:var(--sun);margin-bottom:7px}
+.s-book-desc{font-size:.82rem;color:rgba(255,255,255,.52);line-height:1.6}
+.s-book-status{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:800;margin-top:12px;padding:4px 10px;border-radius:50px}
+.status-live{background:rgba(0,184,169,.2);color:var(--teal)}
+.status-soon{background:rgba(255,199,55,.15);color:var(--sun)}
+
+/* ============================================================
+   WORKSHOPS SECTION
+   ============================================================ */
+.workshops-section{background:var(--cream)}
+.ws-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px;margin-top:48px}
+.ws-card{border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-sm);border:2px solid var(--border);transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;background:white}
+.ws-card:hover{transform:translateY(-8px) rotate(.3deg);box-shadow:var(--shadow-lg)}
+.ws-card-top{padding:26px 22px;display:flex;align-items:flex-start;justify-content:space-between;position:relative;overflow:hidden}
+.ws-card-top::after{content:'';position:absolute;bottom:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.15)}
+.ws-badge{background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.3);border-radius:50px;padding:4px 12px;font-size:.7rem;font-weight:800;color:white;letter-spacing:.5px;text-transform:uppercase}
+.ws-emoji{font-size:2.8rem;line-height:1}
+.ws-card-body{padding:20px 22px 24px}
+.ws-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.25rem;color:var(--ink);margin-bottom:5px}
+.ws-concept{font-size:.73rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.ws-desc{font-size:.88rem;line-height:1.65;color:var(--body);margin-bottom:14px}
+.ws-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.ws-tag{background:var(--surface);border:1.5px solid var(--border);border-radius:50px;padding:4px 12px;font-size:.74rem;font-weight:800;color:var(--body)}
+.ws-enroll{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:50px;font-weight:800;font-size:.87rem;text-decoration:none;color:white;cursor:none;border:none;transition:transform .2s,box-shadow .2s}
+.ws-enroll:hover{transform:translateY(-2px)}
+
+/* ============================================================
+   SCHOOL SECTION
+   ============================================================ */
+.school-section{background:linear-gradient(170deg,var(--ink) 0%,#2D2648 100%);overflow:hidden;position:relative}
+.school-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 10% 50%,rgba(255,199,55,.09) 0%,transparent 55%),radial-gradient(ellipse 50% 60% at 90% 50%,rgba(0,184,169,.07) 0%,transparent 55%)}
+.school-hero{text-align:center;margin-bottom:64px;position:relative;z-index:1}
+.school-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(2.2rem,4vw,3.5rem);color:white;line-height:1.1;margin-bottom:14px}
+.school-title span{background:linear-gradient(90deg,var(--sun),var(--fire));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.school-desc-hero{font-size:1.02rem;line-height:1.82;color:rgba(255,255,255,.68);max-width:640px;margin:0 auto}
+
+/* School Services Grid */
+.school-services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative;z-index:1;margin-bottom:40px}
+.ss-card{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:var(--r-lg);padding:28px;backdrop-filter:blur(6px);transition:all .3s;position:relative;overflow:hidden}
+.ss-card::before{content:'';position:absolute;top:-40px;right:-40px;width:110px;height:110px;border-radius:50%;opacity:.08}
+.ss-card:hover{background:rgba(255,255,255,.11);transform:translateY(-5px);border-color:rgba(255,255,255,.22)}
+.ss-icon-wrap{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px}
+.ss-num{font-family:'Baloo 2',cursive;font-size:.72rem;font-weight:800;color:rgba(255,255,255,.35);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.ss-title{font-family:'Baloo 2',cursive;font-size:1.1rem;color:white;margin-bottom:8px}
+.ss-desc{font-size:.87rem;color:rgba(255,255,255,.62);line-height:1.68}
+.ss-tag{display:inline-block;font-size:.68rem;font-weight:800;padding:3px 10px;border-radius:50px;margin-top:14px;background:rgba(255,199,55,.15);color:var(--sun)}
+
+/* FabLab sub-section */
+.fablab-grid-school{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative;z-index:1;margin-bottom:40px}
+.fab-card-s{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;transition:all .25s}
+.fab-card-s:hover{background:rgba(255,255,255,.09);border-color:rgba(0,184,169,.4)}
+.fab-icon-s{font-size:1.8rem;margin-bottom:12px;display:block}
+.fab-title-s{font-family:'Baloo 2',cursive;font-size:1rem;color:white;margin-bottom:6px}
+.fab-desc-s{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65}
+
+/* Delivery Models */
+.delivery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;z-index:1;margin-bottom:40px}
+.delivery-card{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:18px;padding:22px;text-align:center;transition:all .25s}
+.delivery-card:hover{background:rgba(255,255,255,.1);transform:translateY(-4px)}
+.delivery-icon{font-size:2rem;margin-bottom:12px;display:block}
+.delivery-title{font-family:'Baloo 2',cursive;font-size:1rem;color:white;margin-bottom:6px}
+.delivery-desc{font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.6}
+.delivery-tag{display:inline-block;font-size:.68rem;font-weight:800;padding:3px 10px;border-radius:50px;margin-top:10px;background:rgba(0,184,169,.2);color:var(--teal)}
+
+/* School CTA */
+.school-cta-strip{background:rgba(255,199,55,.1);border:1.5px solid rgba(255,199,55,.25);border-radius:var(--r-lg);padding:32px;text-align:center;position:relative;z-index:1}
+.school-cta-strip h3{font-family:'Baloo 2',cursive;font-size:1.6rem;color:white;margin-bottom:10px}
+.school-cta-strip p{color:rgba(255,255,255,.65);font-size:.97rem;margin-bottom:22px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.75}
+.school-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ============================================================
+   EXPOSURE VISITS
+   ============================================================ */
+.exposure-section{background:var(--surface)}
+.exposure-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.exp-card{background:var(--white);border:2px solid var(--border);border-radius:22px;padding:26px 20px;text-align:center;transition:all .3s}
+.exp-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:var(--sun)}
+.exp-icon{font-size:2.6rem;margin-bottom:14px;display:block}
+.exp-title{font-family:'Baloo 2',cursive;font-size:1rem;color:var(--ink);margin-bottom:8px}
+.exp-desc{font-size:.86rem;color:var(--body);line-height:1.65}
+
+/* ============================================================
+   MENTORS SECTION
+   ============================================================ */
+.mentors-section{background:linear-gradient(170deg,#0A0518 0%,var(--navy) 100%);padding:92px 0;overflow:hidden}
+.mentors-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.mf-btn{padding:8px 18px;border-radius:50px;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.65);font-size:.83rem;font-weight:800;cursor:none;background:transparent;transition:all .2s}
+.mf-btn.active,.mf-btn:hover{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.mentors-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:36px}
+.mentor-card{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:22px;padding:22px;text-align:center;transition:all .3s}
+.mentor-card:hover{background:rgba(255,255,255,.11);transform:translateY(-5px);border-color:rgba(255,255,255,.2)}
+.mentor-av{width:68px;height:68px;border-radius:50%;margin:0 auto 13px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:1.5rem}
+.mentor-name{font-weight:800;font-size:.97rem;color:var(--white);margin-bottom:3px}
+.mentor-inst{font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:8px;font-style:italic}
+.mentor-role{font-size:.82rem;color:rgba(255,255,255,.55);margin-bottom:12px;line-height:1.4}
+.mentor-type{display:inline-block;font-size:.7rem;font-weight:800;padding:3px 10px;border-radius:50px;margin-bottom:14px}
+.mentor-links{display:flex;justify-content:center;gap:7px}
+.mentor-lnk{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:8px;font-size:.75rem;font-weight:800;text-decoration:none;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.65);transition:all .2s}
+.mentor-lnk:hover{background:var(--sun);color:var(--ink);border-color:var(--sun)}
+.mentor-join-box{background:rgba(255,184,0,.08);border:1.5px dashed rgba(255,184,0,.35);border-radius:var(--r-lg);padding:28px;text-align:center}
+.mentor-join-box h3{font-family:'Baloo 2',cursive;font-size:1.3rem;color:var(--sun);margin-bottom:8px}
+.mentor-join-box p{font-size:.92rem;color:rgba(255,255,255,.58);margin-bottom:18px;line-height:1.75}
+
+/* ============================================================
+   FOUNDER'S NOTE
+   ============================================================ */
+.founder-section{background:var(--white);position:relative;overflow:hidden}
+.founder-grid{display:grid;grid-template-columns:1fr 2fr;gap:60px;align-items:flex-start}
+.founder-card{background:linear-gradient(170deg,var(--ink),#2D2648);border-radius:var(--r-lg);padding:36px 28px;text-align:center;position:sticky;top:88px}
+.founder-av{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--sun),var(--fire));margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:1.8rem;color:var(--ink)}
+.founder-name{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.2rem;color:white;margin-bottom:3px}
+.founder-title{font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:18px;line-height:1.5}
+.founder-links{display:flex;justify-content:center;gap:9px}
+.founder-lnk{padding:8px 16px;border-radius:10px;font-size:.8rem;font-weight:800;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.65);text-decoration:none;transition:all .2s}
+.founder-lnk:hover{background:var(--sun);color:var(--ink);border-color:var(--sun)}
+.founder-meta{display:flex;flex-direction:column;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}
+.founder-meta-item{background:rgba(255,255,255,.06);border-radius:10px;padding:11px 14px;text-align:left}
+.founder-meta-label{font-size:.68rem;color:rgba(255,255,255,.38);margin-bottom:3px;text-transform:uppercase;letter-spacing:.8px;font-weight:800}
+.founder-meta-val{font-size:.84rem;color:rgba(255,255,255,.78);line-height:1.4}
+.founder-note{}
+.founder-quote{font-family:'Baloo 2',cursive;font-size:clamp(1.4rem,2.5vw,2rem);font-weight:800;color:var(--ink);line-height:1.28;margin-bottom:28px;padding-left:22px;border-left:4px solid var(--sun)}
+.founder-text{font-size:1rem;color:var(--body);line-height:1.9;margin-bottom:18px}
+.founder-text strong{color:var(--ink);font-weight:800}
+.founder-sig{margin-top:36px;padding-top:24px;border-top:1px solid var(--border)}
+.sig-name{font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:var(--ink)}
+.sig-role{font-size:.85rem;color:var(--muted);margin-top:3px}
+.sig-extra{font-size:.83rem;color:var(--muted);margin-top:6px}
+
+/* ============================================================
+   BLOG SECTION
+   ============================================================ */
+.blog-section{background:var(--cream)}
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.blog-card{background:var(--white);border-radius:22px;overflow:hidden;border:2px solid var(--border);transition:all .3s}
+.blog-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.blog-thumb{height:175px;display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden}
+.blog-cat{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--fire);margin-bottom:7px}
+.blog-body{padding:22px}
+.blog-title{font-family:'Baloo 2',cursive;font-size:1.05rem;font-weight:800;color:var(--ink);margin-bottom:9px;line-height:1.4}
+.blog-excerpt{font-size:.86rem;color:var(--body);line-height:1.65;margin-bottom:14px}
+.blog-meta{display:flex;align-items:center;gap:12px}
+.blog-read{font-size:.76rem;font-weight:800;color:var(--teal)}
+.blog-date{font-size:.73rem;color:var(--muted)}
+
+/* ============================================================
+   SOCIAL SECTION
+   ============================================================ */
+.social-section{background:var(--white);padding:72px 0}
+.social-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:44px}
+.soc{border-radius:var(--r-lg);padding:24px 12px;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:9px;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;border:2px solid rgba(255,255,255,.2);position:relative;overflow:hidden}
+.soc::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 100%)}
+.soc:hover{transform:translateY(-7px) scale(1.03);box-shadow:var(--shadow-lg)}
+.soc-icon-wrap{width:52px;height:52px;border-radius:13px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:1.5rem;position:relative;z-index:1}
+.soc-name{font-family:'Baloo 2',cursive;font-size:1rem;color:white;position:relative;z-index:1}
+.soc-handle{font-size:.74rem;color:rgba(255,255,255,.72);font-weight:700;position:relative;z-index:1}
+.soc-btn{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);color:white;padding:5px 16px;border-radius:50px;font-weight:800;font-size:.75rem;cursor:none;transition:background .2s;position:relative;z-index:1}
+.soc-btn:hover{background:rgba(255,255,255,.35)}
+.s-ig{background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%)}
+.s-yt{background:linear-gradient(135deg,#FF0000,#CC0000)}
+.s-li{background:linear-gradient(135deg,#0A66C2,#004182)}
+.s-fb{background:linear-gradient(135deg,#1877F2,#0056D2)}
+.s-wa{background:linear-gradient(135deg,#25D366,#128C7E)}
+
+/* ============================================================
+   NEWSLETTER
+   ============================================================ */
+.nl-section{background:linear-gradient(135deg,var(--sun) 0%,var(--fire) 55%,var(--rose) 100%);padding:72px 0;overflow:hidden;position:relative}
+.nl-section::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='5' fill='white' fill-opacity='.07'/%3E%3C/svg%3E")}
+.nl-inner{text-align:center;position:relative;z-index:1}
+.nl-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:clamp(1.9rem,4vw,2.8rem);color:white;margin-bottom:8px}
+.nl-sub{font-size:.98rem;color:rgba(255,255,255,.88);margin-bottom:28px}
+.nl-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;max-width:500px;margin:0 auto}
+.nl-input{flex:1;min-width:200px;padding:14px 20px;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-size:.93rem;font-weight:700;color:var(--ink);outline:none;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.nl-input::placeholder{color:var(--muted)}
+.nl-submit{background:var(--ink);color:white;padding:14px 26px;border:none;border-radius:50px;font-family:'Baloo 2',cursive;font-weight:700;font-size:.97rem;cursor:none;transition:transform .2s;box-shadow:0 4px 16px rgba(0,0,0,.2);white-space:nowrap}
+.nl-submit:hover{transform:translateY(-2px)}
+#nlMsg{margin-top:12px;font-family:'Caveat',cursive;font-size:1.2rem;color:white;display:none}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer-zigzag{height:8px;width:100%;background:repeating-linear-gradient(90deg,var(--sun) 0,var(--sun) 14px,var(--fire) 14px,var(--fire) 28px,var(--teal) 28px,var(--teal) 42px,var(--grape) 42px,var(--grape) 56px,var(--rose) 56px,var(--rose) 70px)}
+footer{background:#100E1A;padding:60px clamp(16px,5vw,60px) 28px}
+.footer-grid{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr 1fr;gap:36px;padding-bottom:44px;border-bottom:1px solid rgba(255,255,255,.07)}
+.f-brand{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.4rem;color:var(--fire);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.f-desc{font-size:.85rem;line-height:1.78;color:rgba(255,255,255,.42);max-width:250px}
+.f-social{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.f-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.88rem;text-decoration:none;transition:background .2s,transform .2s}
+.f-icon:hover{background:rgba(255,255,255,.16);transform:translateY(-2px)}
+.f-col-title{font-family:'Baloo 2',cursive;font-size:.92rem;color:white;margin-bottom:14px}
+.f-col ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.f-col ul a{color:rgba(255,255,255,.42);text-decoration:none;font-size:.83rem;transition:color .2s}
+.f-col ul a:hover{color:var(--sun)}
+.footer-bottom{max-width:1240px;margin:22px auto 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:.76rem;color:rgba(255,255,255,.26)}
+.footer-bottom a{color:rgba(255,255,255,.26);text-decoration:none}
+.footer-bottom a:hover{color:rgba(255,255,255,.55)}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.overlay{position:fixed;inset:0;z-index:9999;background:rgba(16,14,26,.82);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex;animation:ovFade .25s ease}
+.modal{background:white;border-radius:30px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.45);animation:modPop .35s cubic-bezier(.34,1.56,.64,1)}
+.modal-head{padding:26px 26px 20px;border-radius:30px 30px 0 0;position:relative}
+.m-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.22);border:none;color:white;font-size:.95rem;cursor:none;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.m-close:hover{background:rgba(255,255,255,.4)}
+.modal-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.5rem;color:white;margin-bottom:4px}
+.modal-sub{font-size:.86rem;color:rgba(255,255,255,.72)}
+.modal-body{padding:22px 26px 26px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:11px 15px;border:2px solid var(--border);border-radius:12px;font-family:'Nunito',sans-serif;font-size:.91rem;font-weight:700;color:var(--ink);outline:none;appearance:none;background:white;transition:border-color .2s,box-shadow .2s;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--fire);box-shadow:0 0 0 3px rgba(255,107,44,.12)}
+.field-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-submit{width:100%;padding:15px;margin-top:18px;background:linear-gradient(135deg,var(--fire),var(--rose));color:white;border:none;border-radius:50px;font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:700;cursor:none;letter-spacing:.3px;box-shadow:0 6px 20px rgba(255,107,44,.4);transition:transform .2s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.modal-submit:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,107,44,.5)}
+.modal-success{display:none;text-align:center;padding:34px 26px}
+.modal-success.show{display:block;animation:modPop .4s ease}
+.suc-icon{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#00967E);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px;animation:bounce .5s cubic-bezier(.34,1.56,.64,1)}
+.suc-title{font-family:'Baloo 2',cursive;font-weight:800;font-size:1.7rem;color:var(--ink);margin-bottom:9px}
+.suc-msg{font-size:.93rem;line-height:1.75;color:var(--body)}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes riseUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseRing{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.1);opacity:1}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes ovFade{from{opacity:0}to{opacity:1}}
+@keyframes modPop{from{opacity:0;transform:scale(.88) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes bounce{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:1100px){
+  .series-grid{grid-template-columns:repeat(3,1fr)}
+  .mentors-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr 1fr;gap:28px}
+}
+@media(max-width:900px){
+  .hero-inner,.book-inner,.founder-grid{grid-template-columns:1fr;gap:36px}
+  .hero-right{order:-1}
+  .book-stage{height:320px}
+  .programs-grid,.school-services-grid,.fablab-grid-school{grid-template-columns:1fr 1fr}
+  .delivery-grid,.exposure-grid{grid-template-columns:1fr 1fr}
+  .social-grid{grid-template-columns:repeat(3,1fr)}
+  .blog-grid{grid-template-columns:1fr 1fr}
+  .pptx-stats{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:22px}
+}
+@media(max-width:650px){
+  .nav-links{display:none}.ham{display:flex}
+  .programs-grid,.school-services-grid,.fablab-grid-school,.delivery-grid,.exposure-grid,.blog-grid,.series-grid{grid-template-columns:1fr}
+  .social-grid{grid-template-columns:1fr 1fr}
+  .mentors-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .ann{display:none}
+  .field-2{grid-template-columns:1fr}
+  .hero-actions,.hero-stats{justify-content:center}
+  .hero-title,.hero-desc,.hero-kicker{text-align:center}
+  .why-grid{grid-template-columns:1fr}
+  .pptx-stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="curR"></div>
+
+<!-- ══════════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════════ -->
+<nav id="nav">
+  <a href="#home" class="logo">
+    <div class="logo-icon">🚀</div>
+    <div>
+      <div class="logo-text">The <span>Aspire</span> Kids</div>
+      <span class="logo-sub">Building Tomorrow's Leaders</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#books">Books</a></li>
+    <li><a href="#workshops">Workshops</a></li>
+    <li><a href="#schools">Schools</a></li>
+    <li><a href="#mentors">Mentors</a></li>
+    <li><a href="#blog">Blog</a></li>
+    <li><a href="#contact" onclick="openModal('collab')" class="nav-cta">Partner With Us 🤝</a></li>
+  </ul>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+</nav>
+<div class="mob-nav" id="mobNav">
+  <a href="#home">🏠 Home</a>
+  <a href="#books">📚 Books</a>
+  <a href="#workshops">🎓 Workshops</a>
+  <a href="#schools">🏫 Schools</a>
+  <a href="#mentors">🌐 Mentors</a>
+  <a href="#blog">📝 Blog</a>
+  <a href="#contact" onclick="openModal('collab')" style="background:var(--fire);color:white;font-weight:800">🤝 Partner With Us</a>
+</div>
+
+<!-- WhatsApp Float -->
+<a href="https://wa.me/919999999999" target="_blank" class="wa-float" title="Chat on WhatsApp">💬</a>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="zigzag" style="position:absolute;top:0;left:0;right:0;z-index:3"></div>
+  <div class="hero-blob" style="width:380px;height:380px;background:var(--sun);top:-8%;right:3%"></div>
+  <div class="hero-blob" style="width:240px;height:240px;background:var(--teal);bottom:6%;left:1%"></div>
+  <div class="hero-blob" style="width:160px;height:160px;background:var(--rose);bottom:22%;right:14%"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-kicker">🌟 Now Officially Launched — The Aspire Kids!</div>
+      <h1 class="hero-title">
+        Every Child is<br>
+        <span class="wave-under">Born to Lead</span> —<br>
+        We Unlock It.
+      </h1>
+      <p class="hero-desc">
+        India's most purposeful ecosystem for young changemakers aged 6–16. Books, school programmes, workshops, global mentors, and career support — building the entrepreneurial, emotionally strong, AI-ready generation India needs.
+      </p>
+      <div class="hero-actions">
+        <a href="#books" class="btn btn-primary">📚 Explore Books</a>
+        <a href="#schools" class="btn btn-secondary">🏫 Partner Your School</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><span class="hstat-num">6–16</span><span class="hstat-label">Age Group</span></div>
+        <div class="hstat"><span class="hstat-num">5</span><span class="hstat-label">Books</span></div>
+        <div class="hstat"><span class="hstat-num">6</span><span class="hstat-label">Workshops</span></div>
+        <div class="hstat"><span class="hstat-num">12+</span><span class="hstat-label">Mentors</span></div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="book-stage">
+        <svg viewBox="0 0 320 420" width="100%" style="filter:drop-shadow(0 28px 56px rgba(24,20,32,.28));transform:perspective(900px) rotateY(-10deg) rotateX(2deg);transition:transform .5s" id="heroBook" onmouseover="this.style.transform='perspective(900px) rotateY(-5deg) rotateX(2deg) translateY(-8px)'" onmouseout="this.style.transform='perspective(900px) rotateY(-10deg) rotateX(2deg)'">
+          <defs>
+            <linearGradient id="covG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6B2C"/><stop offset="100%" stop-color="#F43F5E"/></linearGradient>
+            <linearGradient id="covG2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,.22)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></linearGradient>
+          </defs>
+          <ellipse cx="168" cy="412" rx="110" ry="9" fill="rgba(0,0,0,.18)"/>
+          <rect x="2" y="10" width="36" height="396" rx="5" fill="#C84B10"/>
+          <rect x="4" y="10" width="30" height="396" rx="4" fill="rgba(0,0,0,.15)"/>
+          <text transform="rotate(-90,20,210)" x="20" y="214" text-anchor="middle" font-family="'Baloo 2',cursive" font-size="10" fill="rgba(255,255,255,.6)" font-weight="800">THE ASPIRE KIDS</text>
+          <rect x="36" y="10" width="278" height="396" rx="8" fill="url(#covG)"/>
+          <rect x="36" y="10" width="278" height="396" rx="8" fill="url(#covG2)"/>
+          <rect x="36" y="10" width="56" height="10" fill="#FFC837"/><rect x="92" y="10" width="56" height="10" fill="#FF6B2C"/><rect x="148" y="10" width="56" height="10" fill="#00B8A9"/><rect x="204" y="10" width="56" height="10" fill="#7C3AED"/><rect x="260" y="10" width="54" height="10" rx="0" fill="#F43F5E"/>
+          <rect x="52" y="32" width="248" height="76" rx="10" fill="rgba(255,255,255,.15)"/>
+          <text x="176" y="62" text-anchor="middle" font-family="'Baloo 2',cursive" font-size="12" fill="rgba(255,255,255,.7)" font-weight="700" letter-spacing="2">THE</text>
+          <text x="176" y="90" text-anchor="middle" font-family="'Baloo 2',cursive" font-size="28" fill="white" font-weight="800">ASPIRE KIDS</text>
+          <circle cx="90" cy="165" r="3.5" fill="rgba(255,255,255,.5)"/><circle cx="265" cy="148" r="2.5" fill="rgba(255,255,255,.4)"/><circle cx="72" cy="230" r="2.5" fill="rgba(255,255,255,.35)"/><circle cx="278" cy="240" r="4" fill="rgba(255,255,255,.4)"/>
+          <ellipse cx="250" cy="290" rx="34" ry="34" fill="#FFC837" opacity=".35"/><ellipse cx="250" cy="290" rx="52" ry="12" fill="none" stroke="#FFC837" stroke-width="2.5" opacity=".4"/>
+          <text x="176" y="230" text-anchor="middle" font-size="80">🚀</text>
+          <rect x="52" y="332" width="248" height="62" rx="10" fill="rgba(0,0,0,.22)"/>
+          <text x="176" y="354" text-anchor="middle" font-family="'Nunito',sans-serif" font-size="10" font-weight="800" fill="rgba(255,255,255,.75)">Build It. Make It. Lead It! 🌟</text>
+          <text x="176" y="370" text-anchor="middle" font-family="'Nunito',sans-serif" font-size="9" fill="rgba(255,255,255,.55)">Books · Workshops · Mentors · Schools</text>
+          <text x="176" y="384" text-anchor="middle" font-family="'Nunito',sans-serif" font-size="8.5" fill="rgba(255,255,255,.38)">Ages 6–16 · hello@theaspirekids.in</text>
+          <rect x="36" y="10" width="5" height="396" fill="rgba(255,255,255,.18)" rx="2"/>
+        </svg>
+        <div class="ann ann-1">📚 5 Books Launching!</div>
+        <div class="ann ann-2">🏫 School Partnership</div>
+        <div class="ann ann-3">🌐 12+ Global Mentors</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item">The Kidpreneur</span><span class="ticker-item">Finance for Kids</span><span class="ticker-item">Speech Craft</span><span class="ticker-item">The Tinker Kid</span><span class="ticker-item">AI for Kids</span><span class="ticker-item">Idea Spark</span><span class="ticker-item">Tinker Space</span><span class="ticker-item">Demo Day Studio</span><span class="ticker-item">FabLab Session</span><span class="ticker-item">Pitch Camp</span><span class="ticker-item">The Money Game</span><span class="ticker-item">Career Counselling</span><span class="ticker-item">Global Mentors</span><span class="ticker-item">NEP 2020 Aligned</span><span class="ticker-item">Exposure Visits</span><span class="ticker-item">Kidpreneur Centre</span>
+    <span class="ticker-item">The Kidpreneur</span><span class="ticker-item">Finance for Kids</span><span class="ticker-item">Speech Craft</span><span class="ticker-item">The Tinker Kid</span><span class="ticker-item">AI for Kids</span><span class="ticker-item">Idea Spark</span><span class="ticker-item">Tinker Space</span><span class="ticker-item">Demo Day Studio</span><span class="ticker-item">FabLab Session</span><span class="ticker-item">Pitch Camp</span><span class="ticker-item">The Money Game</span><span class="ticker-item">Career Counselling</span><span class="ticker-item">Global Mentors</span><span class="ticker-item">NEP 2020 Aligned</span><span class="ticker-item">Exposure Visits</span><span class="ticker-item">Kidpreneur Centre</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     WHY WE EXIST
+══════════════════════════════════════════════ -->
+<section class="section why-section" id="why">
+  <div class="inner">
+    <div class="why-grid">
+      <div class="reveal">
+        <span class="sec-label" style="background:var(--fire-l);color:var(--fire-d);">🚨 The Problem We're Solving</span>
+        <h2 class="sec-title">India Produces Graduates, Not Builders.</h2>
+        <p class="sec-desc" style="margin-bottom:20px;">A 250-million-student education system is optimised for exams, not for thinking, creating, or building a life of purpose. We are living in a mental health crisis powered by a purpose vacuum — and schools are the last place anyone is addressing it.</p>
+        <p class="sec-desc" style="margin-bottom:28px;">AI is reshaping every career. Parents want more than marks. And NEP 2020 demands life skills. <strong>The Aspire Kids is the answer the system hasn't provided yet.</strong></p>
+        <div class="pptx-stats">
+          <div class="pptx-stat reveal"><div class="pptx-num">250M+</div><div class="pptx-label">School-going students in India — world's largest K-12 population</div></div>
+          <div class="pptx-stat reveal"><div class="pptx-num">1Cr+</div><div class="pptx-label">Graduates entering workforce every year with too few meaningful jobs</div></div>
+          <div class="pptx-stat reveal"><div class="pptx-num" style="font-size:2.6rem;">ZERO</div><div class="pptx-label">Mandatory school modules on self-discovery or entrepreneurship</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="why-stat-block reveal">
+          <div class="why-big-num">1 in 3</div>
+          <div class="why-big-label">Children globally shows signs of anxiety or depression before age 14. The root cause? Lack of purpose, direction, and real-world skills that their education never gave them.</div>
+        </div>
+        <div class="crisis-cards">
+          <div class="crisis-card reveal">
+            <div class="crisis-icon" style="background:var(--fire-l)">😟</div>
+            <div><div class="crisis-title">The Identity Crisis</div><div class="crisis-text">Students choose careers based on peer pressure, not strengths. Schools train children to follow instructions, not solve problems. Kids cannot distinguish business from innovation from a hustle.</div></div>
+          </div>
+          <div class="crisis-card reveal">
+            <div class="crisis-icon" style="background:#EEF3FF">🤖</div>
+            <div><div class="crisis-title">The AI Disruption Shock</div><div class="crisis-text">By the time today's 10-year-olds graduate, half the roles they were trained for won't exist. Only creative, adaptive, entrepreneurial minds will thrive in the AI economy.</div></div>
+          </div>
+          <div class="crisis-card reveal">
+            <div class="crisis-icon" style="background:var(--sun-l)">📚</div>
+            <div><div class="crisis-title">Parents Want More Than Marks</div><div class="crisis-text">A generation of parents scarred by burnout and job loss are actively seeking programs that teach purpose, resilience, ownership, and the builder's mindset — starting young.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--cream)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="#FFFFFF"><path d="M0,32 C360,64 1080,0 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     PROGRAMS OVERVIEW
+══════════════════════════════════════════════ -->
+<section class="section programs-section" id="programs">
+  <div class="inner">
+    <div class="t-center section-header reveal" style="margin-bottom:44px">
+      <span class="sec-label" style="background:var(--sun-l);color:var(--sun-d);">✨ What We Offer</span>
+      <h2 class="sec-title">Three Pillars of<br>Transformation</h2>
+      <p class="sec-desc">Everything we do fits into three powerful pillars — designed to meet every child where they are and take them far beyond where they thought they could go.</p>
+    </div>
+    <div class="programs-grid">
+      <div class="prog-card reveal" style="transition-delay:.1s">
+        <div class="prog-top" style="background:linear-gradient(135deg,#FFF3C4,#FFDAA0)">📚</div>
+        <div class="prog-body">
+          <span class="prog-tag" style="background:var(--sun-l);color:var(--sun-d);">📖 Books & Learning</span>
+          <div class="prog-title">Aspire Kids Book Series</div>
+          <p class="prog-desc">5 books on entrepreneurship, finance, AI, design thinking, and communication — written specifically for ages 6–16. Each book is a 30-40 day tactile learning journey, not just a read.</p>
+        </div>
+      </div>
+      <div class="prog-card reveal" style="transition-delay:.2s">
+        <div class="prog-top" style="background:linear-gradient(135deg,#C7FFF4,#A0F0E0)">🏫</div>
+        <div class="prog-body">
+          <span class="prog-tag" style="background:var(--teal-l);color:var(--teal-d);">🤝 School Collaboration</span>
+          <div class="prog-title">In-School Partnerships</div>
+          <p class="prog-desc">Kidpreneurship Centres, Tinker Labs, FabLabs, career counselling, psychologist support, teacher training — we build complete ecosystems inside schools, NEP 2020 aligned.</p>
+        </div>
+      </div>
+      <div class="prog-card reveal" style="transition-delay:.3s">
+        <div class="prog-top" style="background:linear-gradient(135deg,#FFE5DF,#FFBFB0)">🎪</div>
+        <div class="prog-body">
+          <span class="prog-tag" style="background:var(--rose-l);color:var(--rose-d);">🎓 Workshops</span>
+          <div class="prog-title">Hands-On Workshops</div>
+          <p class="prog-desc">Idea Spark, Tinker Space, Demo Day Studio, FabLab Session, Pitch Camp, The Money Game — 6 immersive formats that build confidence through doing, not just watching.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--white)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="var(--cream)"><path d="M0,32 C360,0 1080,64 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     THE KIDPRENEUR BOOK (FLAGSHIP)
+══════════════════════════════════════════════ -->
+<section class="section book-section" id="books">
+  <div class="inner">
+    <div class="book-inner">
+      <div class="reveal">
+        <span class="sec-label" style="background:var(--fire-l);color:var(--fire-d);">📖 Book 1 — Now Launching</span>
+        <h2 class="sec-title">The Kidpreneur<br><span style="color:var(--fire)">Book</span></h2>
+        <p class="sec-desc" style="margin-bottom:6px">A 40-day journey that transforms passive learners into active builders. 13 chapters. 13 hands-on tactile activities. One complete business journey — from self-discovery and real-world surveys, to building and pitching a venture.</p>
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:22px;font-weight:700">NEP 2020 Aligned · Physical Workbook · Mentor Playbook Included · Ages 8–16</p>
+        <div class="book-formats">
+          <div class="format-card reveal" style="transition-delay:.1s">
+            <div class="format-icon" style="background:var(--teal-l)">📱</div>
+            <div>
+              <div class="format-title">Virtual Edition — Read Free Online</div>
+              <p class="format-desc">The complete interactive digital book with fill-in activities, illustrated characters, and full page navigation. Works on any device.</p>
+              <a href="https://claude.ai/public/artifacts/6c20f9f2-e228-4375-ab9d-b9d2d439f408" target="_blank" class="format-cta" style="background:var(--teal-l);color:var(--teal-d);border-color:var(--teal)">🌐 Open Interactive Book →</a>
+            </div>
+          </div>
+          <div class="format-card reveal" style="transition-delay:.2s">
+            <div class="format-icon" style="background:var(--sun-l)">📚</div>
+            <div>
+              <div class="format-title">Print Edition — Physical Copy</div>
+              <p class="format-desc">A beautifully printed full-colour book with tear-out activity sheets, a Kidpreneur Journal, and all 13 hands-on activity pages. Perfect for classrooms and gifts.</p>
+              <a href="#contact" onclick="openModal('print')" class="format-cta" style="background:var(--sun-l);color:var(--sun-d);border-color:var(--sun)">🛒 Order Print Copy →</a>
+            </div>
+          </div>
+          <div class="format-card reveal" style="transition-delay:.3s">
+            <div class="format-icon" style="background:var(--grape-l)">📦</div>
+            <div>
+              <div class="format-title">Classroom &amp; Bulk Orders</div>
+              <p class="format-desc">Special pricing for schools, NGOs, and enrichment programs. Includes teacher's guide, lesson plans, and assessment rubrics for 13 sessions.</p>
+              <a href="#contact" onclick="openModal('bulk')" class="format-cta" style="background:var(--grape-l);color:var(--grape-d);border-color:var(--grape)">📦 Request Bulk Quote →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="book-vis-wrap reveal" style="transition-delay:.2s">
+        <div class="book-glow-ring"></div>
+        <div class="series-badge">📚 Book 1 of 5 — Full Series Coming!</div>
+        <svg viewBox="0 0 260 360" width="260" style="filter:drop-shadow(0 20px 48px rgba(24,20,32,.24));position:relative;z-index:2">
+          <defs><linearGradient id="cov3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6B2C"/><stop offset="100%" stop-color="#F43F5E"/></linearGradient></defs>
+          <rect x="0" y="0" width="260" height="360" rx="10" fill="url(#cov3)"/>
+          <rect x="0" y="0" width="52" height="8" rx="0" fill="#FFC837"/><rect x="52" y="0" width="52" height="8" fill="#FF6B2C"/><rect x="104" y="0" width="52" height="8" fill="#00B8A9"/><rect x="156" y="0" width="52" height="8" fill="#7C3AED"/><rect x="208" y="0" width="52" height="8" rx="0" fill="#F43F5E"/>
+          <rect x="16" y="20" width="228" height="68" rx="8" fill="rgba(255,255,255,.15)"/>
+          <text x="130" y="44" text-anchor="middle" font-family="'Baloo 2',cursive" font-size="11" fill="rgba(255,255,255,.7)" font-weight="700" letter-spacing="2">THE</text>
+          <text x="130" y="74" text-anchor="middle" font-family="'Baloo 2',cursive" font-size="26" fill="white" font-weight="800">KIDPRENEUR</text>
+          <text x="130" y="192" text-anchor="middle" font-size="72">🚀</text>
+          <rect x="16" y="298" width="228" height="50" rx="8" fill="rgba(0,0,0,.2)"/>
+          <text x="130" y="318" text-anchor="middle" font-family="'Nunito',sans-serif" font-size="10" font-weight="800" fill="rgba(255,255,255,.75)">Build It. Make It. Sell It!</text>
+          <text x="130" y="334" text-anchor="middle" font-family="'Nunito',sans-serif" font-size="9" fill="rgba(255,255,255,.5)">40 Days · Ages 8–16 · NEP Aligned</text>
+          <rect x="0" y="0" width="14" height="360" rx="5" fill="rgba(0,0,0,.25)"/>
+          <rect x="0" y="0" width="5" height="360" fill="rgba(255,255,255,.1)" rx="3"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--ink)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="#FFFFFF"><path d="M0,32 C360,0 1080,64 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     FULL BOOK SERIES (5 BOOKS)
+══════════════════════════════════════════════ -->
+<section class="series-full-section" id="bookseries">
+  <div class="inner">
+    <div class="t-center reveal" style="margin-bottom:44px;position:relative;z-index:1">
+      <span class="sec-label" style="background:rgba(255,199,55,.18);color:var(--sun);">📚 The Complete Series</span>
+      <h2 class="sec-title" style="color:white">The Aspire Kids<br><span style="background:linear-gradient(90deg,var(--sun),var(--fire));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">5-Book Master Series</span></h2>
+      <p class="sec-desc" style="color:rgba(255,255,255,.6);margin:0 auto">The most comprehensive life-skills curriculum for young minds — from idea generation and financial literacy to AI basics and public speaking. Each book a standalone adventure, together a complete system.</p>
+    </div>
+    <div class="series-grid">
+      <div class="s-book-card reveal" style="transition-delay:.1s">
+        <div class="s-book-cover" style="background:linear-gradient(160deg,#2A1208,#7C2A08)">
+          <div class="s-book-num">Book 01</div>
+          <div class="s-book-emoji">💼</div>
+          <div class="s-book-name">The Kidpreneur<br>"Build it. Make it. Sell it."</div>
+        </div>
+        <div class="s-book-body">
+          <span class="s-book-badge">Flagship · Launched</span>
+          <div class="s-book-desc">A 40-day adventure into entrepreneurship — ideation, prototyping, surveys, sales, and pitching. Every child's first real business experience.</div>
+          <div><span class="s-book-status status-live">✅ Available Now</span></div>
+        </div>
+      </div>
+      <div class="s-book-card reveal" style="transition-delay:.15s">
+        <div class="s-book-cover" style="background:linear-gradient(160deg,#0A1A30,#0B4080)">
+          <div class="s-book-num">Book 02</div>
+          <div class="s-book-emoji">💰</div>
+          <div class="s-book-name">Finance for Kids<br>"Money Makes Sense"</div>
+        </div>
+        <div class="s-book-body">
+          <span class="s-book-badge">Financial Literacy</span>
+          <div class="s-book-desc">Earning, saving, investing, budgeting, profit/loss, the 40-40-20 rule — money skills schools never teach, made fun and tactile for every child.</div>
+          <div><span class="s-book-status status-soon">🔜 Coming Soon</span></div>
+        </div>
+      </div>
+      <div class="s-book-card reveal" style="transition-delay:.2s">
+        <div class="s-book-cover" style="background:linear-gradient(160deg,#28082A,#6B0A70)">
+          <div class="s-book-num">Book 03</div>
+          <div class="s-book-emoji">🎤</div>
+          <div class="s-book-name">Speech Craft<br>"Find Your Voice"</div>
+        </div>
+        <div class="s-book-body">
+          <span class="s-book-badge">Communication</span>
+          <div class="s-book-desc">Public speaking, elevator pitches, storytelling frameworks, debate, and body language — mastering the 60-second pitch and beyond. Every chapter is a stage.</div>
+          <div><span class="s-book-status status-soon">🔜 Coming Soon</span></div>
+        </div>
+      </div>
+      <div class="s-book-card reveal" style="transition-delay:.25s">
+        <div class="s-book-cover" style="background:linear-gradient(160deg,#1A0F04,#6B3A10)">
+          <div class="s-book-num">Book 04</div>
+          <div class="s-book-emoji">🔧</div>
+          <div class="s-book-name">The Tinker Kid<br>"Design. Build. Solve."</div>
+        </div>
+        <div class="s-book-body">
+          <span class="s-book-badge">Design Thinking</span>
+          <div class="s-book-desc">Empathy maps, problem definition, ideation, prototyping, and testing. The full design-thinking cycle on real community problems — building the maker mindset.</div>
+          <div><span class="s-book-status status-soon">🔜 Coming Soon</span></div>
+        </div>
+      </div>
+      <div class="s-book-card reveal" style="transition-delay:.3s">
+        <div class="s-book-cover" style="background:linear-gradient(160deg,#081828,#0F3060)">
+          <div class="s-book-num">Book 05</div>
+          <div class="s-book-emoji">🤖</div>
+          <div class="s-book-name">AI for Kids<br>"Think with Machines"</div>
+        </div>
+        <div class="s-book-body">
+          <span class="s-book-badge">Future Skills</span>
+          <div class="s-book-desc">What is AI? How do chatbots and generators work? Using AI for business ideas, responsible AI use, digital ethics — AI as a superpower, not a replacement.</div>
+          <div><span class="s-book-status status-soon">🔜 Coming Soon</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="t-center reveal" style="margin-top:38px;position:relative;z-index:1">
+      <a href="#contact" onclick="openModal('bulk')" class="btn btn-sun">📬 Notify Me When Each Book Drops</a>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--cream)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="var(--ink)"><path d="M0,32 C360,64 1080,0 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     WORKSHOPS
+══════════════════════════════════════════════ -->
+<section class="section workshops-section" id="workshops">
+  <div class="inner">
+    <div class="t-center reveal" style="margin-bottom:8px">
+      <span class="sec-label" style="background:var(--rose-l);color:var(--rose-d);">🎓 Live Programs</span>
+      <h2 class="sec-title">Workshops That<br><span style="color:var(--rose)">Actually Excite Kids</span></h2>
+      <p class="sec-desc">Highly interactive, tactile, and skills-first workshops delivered at our centre, at your school, or online. Each workshop delivers real skill — not just fun.</p>
+    </div>
+    <div class="ws-grid">
+
+      <div class="ws-card reveal" style="transition-delay:.1s">
+        <div class="ws-card-top" style="background:linear-gradient(135deg,#FFC837,#FF6B2C)">
+          <div><div class="ws-badge">Starter</div></div>
+          <div class="ws-emoji">💡</div>
+        </div>
+        <div class="ws-card-body">
+          <div class="ws-title">Idea Spark</div>
+          <div class="ws-concept" style="color:var(--sun-d)">Ideation · Brainstorming · Problem Spotting</div>
+          <p class="ws-desc">The starting point of every entrepreneur. Children learn brainstorming, problem identification, creative thinking frameworks, and how to turn everyday frustrations into million-dollar ideas. High energy, high fun.</p>
+          <div class="ws-meta"><span class="ws-tag">⏱️ Half Day</span><span class="ws-tag">👧 Ages 8–16</span><span class="ws-tag">🏫 School / Centre</span></div>
+          <button class="ws-enroll" style="background:linear-gradient(135deg,var(--sun),var(--fire));box-shadow:3px 4px 0 var(--sun-d);color:var(--ink)" onclick="openModal('ws-idea')">Enroll Now →</button>
+        </div>
+      </div>
+
+      <div class="ws-card reveal" style="transition-delay:.15s">
+        <div class="ws-card-top" style="background:linear-gradient(135deg,#00B8A9,#00967E)">
+          <div><div class="ws-badge">Making</div></div>
+          <div class="ws-emoji">🔨</div>
+        </div>
+        <div class="ws-card-body">
+          <div class="ws-title">Tinker Space</div>
+          <div class="ws-concept" style="color:var(--teal-d)">Design Thinking · Empathy · Prototyping</div>
+          <p class="ws-desc">A hands-on maker experience inspired by Stanford's d.school methodology. Children observe real problems, empathise with users, prototype solutions using basic materials, and test them live in front of an audience.</p>
+          <div class="ws-meta"><span class="ws-tag">⏱️ Full Day</span><span class="ws-tag">👧 Ages 8–14</span><span class="ws-tag">⚙️ Design Focus</span></div>
+          <button class="ws-enroll" style="background:linear-gradient(135deg,var(--teal),#00967E);box-shadow:3px 4px 0 var(--teal-d)" onclick="openModal('ws-tinker')">Enroll Now →</button>
+        </div>
+      </div>
+
+      <div class="ws-card reveal" style="transition-delay:.2s">
+        <div class="ws-card-top" style="background:linear-gradient(135deg,#FF6B2C,#F43F5E)">
+          <div><div class="ws-badge">Flagship</div></div>
+          <div class="ws-emoji">🎬</div>
+        </div>
+        <div class="ws-card-body">
+          <div class="ws-title">Demo Day Studio</div>
+          <div class="ws-concept" style="color:var(--fire-d)">Presentation · Product Demo · Investor Panel</div>
+          <p class="ws-desc">Every startup has a demo day. So do we — for kids! Children present their products, services, or ideas to a live "investor panel." A full simulation of Silicon Valley Demo Day inside your school hall.</p>
+          <div class="ws-meta"><span class="ws-tag">⏱️ Full Day</span><span class="ws-tag">👧 Ages 10–16</span><span class="ws-tag">🎤 Presentation</span></div>
+          <button class="ws-enroll" style="background:linear-gradient(135deg,var(--fire),var(--rose));box-shadow:3px 4px 0 var(--fire-d)" onclick="openModal('ws-demo')">Enroll Now →</button>
+        </div>
+      </div>
+
+      <div class="ws-card reveal" style="transition-delay:.25s">
+        <div class="ws-card-top" style="background:linear-gradient(135deg,#7C3AED,#0070F3)">
+          <div><div class="ws-badge">Makers</div></div>
+          <div class="ws-emoji">🏭</div>
+        </div>
+        <div class="ws-card-body">
+          <div class="ws-title">FabLab Session — The Makers</div>
+          <div class="ws-concept" style="color:var(--grape)">Fabrication · Electronics · Product Building</div>
+          <p class="ws-desc">Enter the fabrication lab! Students use 3D printers, laser cutters, electronic kits, and creative materials to build physical product prototypes. Covers maker culture, basic electronics, IoT basics, and digital design.</p>
+          <div class="ws-meta"><span class="ws-tag">⏱️ Full Day</span><span class="ws-tag">👧 Ages 9–16</span><span class="ws-tag">⚙️ FabLab Access</span></div>
+          <button class="ws-enroll" style="background:linear-gradient(135deg,var(--grape),#0070F3);box-shadow:3px 4px 0 var(--grape-d)" onclick="openModal('ws-fab')">Enroll Now →</button>
+        </div>
+      </div>
+
+      <div class="ws-card reveal" style="transition-delay:.3s">
+        <div class="ws-card-top" style="background:linear-gradient(135deg,#F43F5E,#FFC837)">
+          <div><div class="ws-badge">Intensive</div></div>
+          <div class="ws-emoji">🎤</div>
+        </div>
+        <div class="ws-card-body">
+          <div class="ws-title">Pitch Camp</div>
+          <div class="ws-concept" style="color:var(--rose-d)">Startup · Pitching · Confidence · Competition</div>
+          <p class="ws-desc">90 seconds. One idea. Your best shot. Pitch Camp trains children in elevator pitches, storytelling, body language, and investor communication over 2-3 intensive days. Ends with a live panel and trophies.</p>
+          <div class="ws-meta"><span class="ws-tag">⏱️ 2–3 Days</span><span class="ws-tag">👧 Ages 10–16</span><span class="ws-tag">🏆 Competition</span></div>
+          <button class="ws-enroll" style="background:linear-gradient(135deg,var(--rose),var(--sun));box-shadow:3px 4px 0 var(--rose-d);color:var(--ink)" onclick="openModal('ws-pitch')">Enroll Now →</button>
+        </div>
+      </div>
+
+      <div class="ws-card reveal" style="transition-delay:.35s">
+        <div class="ws-card-top" style="background:linear-gradient(135deg,#2ECC71,#00B8A9)">
+          <div><div class="ws-badge">Finance</div></div>
+          <div class="ws-emoji">🎲</div>
+        </div>
+        <div class="ws-card-body">
+          <div class="ws-title">The Money Game</div>
+          <div class="ws-concept" style="color:#1E9E55">Finance · Budgeting · Investment · Simulation</div>
+          <p class="ws-desc">A live financial literacy simulation where children earn, save, invest, donate, and face real-world money decisions using beans and jars. Experience costs, profit, reinvestment, and the 40-40-20 rule through tactile play.</p>
+          <div class="ws-meta"><span class="ws-tag">⏱️ Full Day</span><span class="ws-tag">👧 Ages 6–14</span><span class="ws-tag">💰 Simulation</span></div>
+          <button class="ws-enroll" style="background:linear-gradient(135deg,#2ECC71,var(--teal));box-shadow:3px 4px 0 #1E9E55" onclick="openModal('ws-money')">Enroll Now →</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="t-center" style="margin-top:40px">
+      <a href="#contact" onclick="openModal('ws-idea')" class="btn btn-primary reveal">🎓 Book a Workshop for Your School</a>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--ink)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="var(--cream)"><path d="M0,32 C360,64 1080,0 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     SCHOOL COLLABORATION — COMPREHENSIVE
+══════════════════════════════════════════════ -->
+<section class="section school-section" id="schools">
+  <div class="inner">
+    <div class="school-hero reveal">
+      <span class="sec-label" style="background:rgba(255,199,55,.18);color:var(--sun);">🏫 School Collaboration</span>
+      <div class="school-title">We Come to Your School.<br><span>You See Transformed Students.</span></div>
+      <p class="school-desc-hero">We partner with forward-thinking schools to build complete ecosystems — not just add-on programs. Our school collaboration brings expert support directly into the school environment, both physically and virtually, all year round. Fully aligned with NEP 2020 life-skills mandate.</p>
+    </div>
+
+    <!-- 6 Core Services -->
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.6rem;color:white;text-align:center;margin-bottom:28px;position:relative;z-index:1" class="reveal">Core Services We Offer Schools</h3>
+    <div class="school-services-grid">
+      <div class="ss-card reveal" style="transition-delay:.05s">
+        <div class="ss-num">Service 01</div>
+        <div class="ss-icon-wrap">🎯</div>
+        <div class="ss-title">Career Counselling for Kids</div>
+        <div class="ss-desc">Age-appropriate career discovery sessions helping children explore their interests, aptitudes, and future pathways through assessments, career surveys, real-world interviews, and structured reflection — not just aptitude tests.</div>
+        <span class="ss-tag">Group &amp; Individual Sessions</span>
+      </div>
+      <div class="ss-card reveal" style="transition-delay:.1s">
+        <div class="ss-num">Service 02</div>
+        <div class="ss-icon-wrap">🗺️</div>
+        <div class="ss-title">Career Guidance Programs</div>
+        <div class="ss-desc">Multi-session structured programs connecting students with real professionals, industry exposure, and future-career mapping tools. Students conduct 20+ real-world interviews before the program — they survey the world first.</div>
+        <span class="ss-tag">Term-Long Program</span>
+      </div>
+      <div class="ss-card reveal" style="transition-delay:.15s">
+        <div class="ss-num">Service 03</div>
+        <div class="ss-icon-wrap">🧠</div>
+        <div class="ss-title">Psychologist Support — On Demand</div>
+        <div class="ss-desc">Licensed child psychologists available virtually and physically for individual sessions, group counselling, crisis support, and mental wellness programs. Physical and virtual formats. Individual and group sessions on demand for every child who needs it.</div>
+        <span class="ss-tag">Physical + Virtual · On Demand</span>
+      </div>
+      <div class="ss-card reveal" style="transition-delay:.2s">
+        <div class="ss-num">Service 04</div>
+        <div class="ss-icon-wrap">🏗️</div>
+        <div class="ss-title">Kidpreneur Centre Establishment</div>
+        <div class="ss-desc">We co-design, equip, and activate a dedicated Kidpreneurship Centre inside your school — a physical space for entrepreneurship education, business thinking, and innovation culture. Branded, equipped, and buzzing with energy.</div>
+        <span class="ss-tag">Physical Space + Curriculum</span>
+      </div>
+      <div class="ss-card reveal" style="transition-delay:.25s">
+        <div class="ss-num">Service 05</div>
+        <div class="ss-icon-wrap">⚙️</div>
+        <div class="ss-title">Tinker Lab &amp; FabLab Setup</div>
+        <div class="ss-desc">We set up fully functional Tinker Labs and Fabrication Laboratories in schools — with maker tools, 3D printers, electronics kits, IoT integration, laser cutting, and a curated STEM-entrepreneurship curriculum. From concept to opening day.</div>
+        <span class="ss-tag">Full Setup + Training</span>
+      </div>
+      <div class="ss-card reveal" style="transition-delay:.3s">
+        <div class="ss-num">Service 06</div>
+        <div class="ss-icon-wrap">👩‍🏫</div>
+        <div class="ss-title">Teacher Training &amp; Certification</div>
+        <div class="ss-desc">We train and certify your teachers to independently facilitate Kidpreneurship sessions, design thinking workshops, and career discovery programs. Your teachers become life-skills champions — no dependency on us for daily delivery.</div>
+        <span class="ss-tag">Certified Programme</span>
+      </div>
+    </div>
+
+    <!-- FabLab Capabilities -->
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.5rem;color:white;text-align:center;margin-bottom:24px;position:relative;z-index:1" class="reveal">⚙️ What's Inside Our FabLab</h3>
+    <div class="fablab-grid-school">
+      <div class="fab-card-s reveal"><span class="fab-icon-s">🖨️</span><div class="fab-title-s">3D Printing Studio</div><div class="fab-desc-s">Kids design product prototypes digitally and watch them come to life layer by layer. From a better pencil holder to a product concept — the printer never judges.</div></div>
+      <div class="fab-card-s reveal"><span class="fab-icon-s">✂️</span><div class="fab-title-s">Laser Cutting &amp; Craft</div><div class="fab-desc-s">Precise laser cutting for custom packaging, product components, and signage. Students see their logo cut into wood, acrylic, or cardboard — the pride is instant.</div></div>
+      <div class="fab-card-s reveal"><span class="fab-icon-s">💻</span><div class="fab-title-s">Digital Design Pods</div><div class="fab-desc-s">Age-appropriate tools for logos, flyers, product labels, and basic websites. Digital literacy meets entrepreneurship in every session.</div></div>
+      <div class="fab-card-s reveal"><span class="fab-icon-s">🤖</span><div class="fab-title-s">Electronics &amp; Coding</div><div class="fab-desc-s">Arduino, Micro:bit, and IoT projects so kids build smart products. An alarm system, a light-up sign, a vending machine prototype — the FabLab makes it real.</div></div>
+      <div class="fab-card-s reveal"><span class="fab-icon-s">🧪</span><div class="fab-title-s">Maker Materials Library</div><div class="fab-desc-s">Cardboard, clay, fabric, foam, circuits, motors, sensors. A fully stocked materials library so no idea is ever stopped by "we don't have that."</div></div>
+      <div class="fab-card-s reveal"><span class="fab-icon-s">🏆</span><div class="fab-title-s">Demo Day Studio</div><div class="fab-desc-s">A mini stage and presentation zone where kids pitch to peers, mentors, and parents. Because every inventor deserves a spotlight moment in their school.</div></div>
+    </div>
+
+    <!-- Delivery Models -->
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.5rem;color:white;text-align:center;margin-bottom:24px;position:relative;z-index:1" class="reveal">🚌 Flexible Delivery Formats</h3>
+    <div class="delivery-grid">
+      <div class="delivery-card reveal">
+        <span class="delivery-icon">🏫</span>
+        <div class="delivery-title">In-School Program</div>
+        <div class="delivery-desc">40-day curriculum integrated into school timetable. Teacher training included. Aligns with NEP 2020 life-skills mandate.</div>
+        <span class="delivery-tag">Term-Long · NEP Aligned</span>
+      </div>
+      <div class="delivery-card reveal">
+        <span class="delivery-icon">📅</span>
+        <div class="delivery-title">Weekend Bootcamp</div>
+        <div class="delivery-desc">10-weekend intensive format for out-of-school engagement. Ideal for tuition centres, coaching academies, and community halls.</div>
+        <span class="delivery-tag">Flexible · Community Ready</span>
+      </div>
+      <div class="delivery-card reveal">
+        <span class="delivery-icon">☀️</span>
+        <div class="delivery-title">Summer / Winter Camp</div>
+        <div class="delivery-desc">Concentrated 2-week immersive camp during school breaks. Includes industrial visits and a final Pitch Day with live judges.</div>
+        <span class="delivery-tag">2 Weeks · Immersive</span>
+      </div>
+      <div class="delivery-card reveal">
+        <span class="delivery-icon">🌍</span>
+        <div class="delivery-title">CSR &amp; Community Model</div>
+        <div class="delivery-desc">NGOs, district bodies, and CSR programs can adopt the curriculum for underserved communities at subsidised rates with measurable impact.</div>
+        <span class="delivery-tag">Subsidised · Impact-Ready</span>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="school-cta-strip reveal">
+      <h3>🤝 Ready to Transform Your School?</h3>
+      <p>Whether you are a school principal, a district education officer, a parent association, or a CSR program — we have a model built for you. Let's start with a conversation.</p>
+      <div class="school-cta-btns">
+        <a href="#contact" onclick="openModal('school')" class="btn btn-sun">🏫 Partner Your School</a>
+        <a href="#contact" onclick="openModal('fablab')" class="btn btn-teal">⚙️ Setup a FabLab</a>
+        <a href="#contact" onclick="openModal('collab')" class="btn btn-secondary" style="color:white;border-color:rgba(255,255,255,.3)">💬 Talk to Us First</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--surface)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="var(--ink)"><path d="M0,32 C360,0 1080,64 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     EXPOSURE VISITS
+══════════════════════════════════════════════ -->
+<section class="section exposure-section" id="exposure">
+  <div class="inner">
+    <div class="t-center reveal" style="margin-bottom:44px">
+      <span class="sec-label" style="background:var(--navy);color:white;">🌍 Exposure Visits</span>
+      <h2 class="sec-title">Learning Beyond<br>The Classroom</h2>
+      <p class="sec-desc">We take children beyond classrooms and campuses — into the real world. Exposure visits to startups, factories, government offices, and innovation hubs open young minds to what's genuinely possible.</p>
+    </div>
+    <div class="exposure-grid">
+      <div class="exp-card reveal"><span class="exp-icon">🏢</span><div class="exp-title">Startup &amp; Incubator Visits</div><div class="exp-desc">Visit tech incubators and co-working spaces. Meet real founders, see real teams, and witness what building a company actually looks like from day one.</div></div>
+      <div class="exp-card reveal"><span class="exp-icon">🏭</span><div class="exp-title">Manufacturing &amp; Maker Tours</div><div class="exp-desc">From factories to fabrication units — children see how ideas become real products at scale. Sparks interest in engineering, design, and supply chains.</div></div>
+      <div class="exp-card reveal"><span class="exp-icon">🏛️</span><div class="exp-title">Government &amp; Policy Visits</div><div class="exp-desc">Young leaders visit district offices, courts, and public institutions. Understanding governance, social entrepreneurship, and civic responsibility starts early.</div></div>
+      <div class="exp-card reveal"><span class="exp-icon">🔬</span><div class="exp-title">Research &amp; Innovation Hubs</div><div class="exp-desc">CSIR labs, IIT innovation centres, and incubators — children interact directly with scientists and researchers shaping tomorrow's world today.</div></div>
+    </div>
+    <div class="t-center" style="margin-top:38px">
+      <a href="#contact" onclick="openModal('school')" class="btn btn-navy reveal">🌍 Plan an Exposure Visit</a>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:#0A0518"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="#FAFAF6"><path d="M0,32 C360,64 1080,0 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     MENTORS — FULL PAGE SECTION
+══════════════════════════════════════════════ -->
+<section class="mentors-section" id="mentors">
+  <div class="inner">
+    <div class="t-center reveal" style="margin-bottom:16px">
+      <span class="sec-label" style="background:rgba(255,184,0,.18);color:var(--sun);">🌐 Global Mentors</span>
+      <h2 class="sec-title" style="color:white">Meet the People<br>Who've Done It</h2>
+      <p class="sec-desc" style="color:rgba(255,255,255,.6);margin:0 auto 28px">Our mentor network is a living library of real-world experience. Entrepreneurs, investors, engineers, psychologists, professors — every child who connects with an Aspire Kids mentor connects with someone who has walked the path they dream of.</p>
+    </div>
+    <div class="mentors-filters reveal">
+      <button class="mf-btn active" onclick="filterMentors('all',this)">All Mentors</button>
+      <button class="mf-btn" onclick="filterMentors('entrepreneur',this)">🚀 Entrepreneurs</button>
+      <button class="mf-btn" onclick="filterMentors('engineer',this)">💻 Engineers</button>
+      <button class="mf-btn" onclick="filterMentors('psychologist',this)">🧠 Mental Health</button>
+      <button class="mf-btn" onclick="filterMentors('professor',this)">🎓 Academia</button>
+      <button class="mf-btn" onclick="filterMentors('speaker',this)">🎤 Speakers</button>
+    </div>
+    <div class="mentors-grid" id="mentorsGrid">
+
+      <div class="mentor-card reveal" data-type="entrepreneur">
+        <div class="mentor-av" style="background:linear-gradient(135deg,var(--sun),var(--fire));color:var(--ink)">RT</div>
+        <div class="mentor-name">Ravi Teja</div>
+        <div class="mentor-inst">IIMV Graduate</div>
+        <div class="mentor-role">Serial Entrepreneur · Built &amp; scaled multiple ventures across tech and education sectors in India</div>
+        <span class="mentor-type" style="background:rgba(255,184,0,.2);color:var(--sun);">🚀 Entrepreneur</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="psychologist">
+        <div class="mentor-av" style="background:linear-gradient(135deg,#A855F7,#7C3AED);color:white">HR</div>
+        <div class="mentor-name">Hruthvika</div>
+        <div class="mentor-inst">MIT Alumna</div>
+        <div class="mentor-role">Child &amp; Adolescent Psychologist · Specialist in youth mental health, purpose, and emotional resilience</div>
+        <span class="mentor-type" style="background:rgba(168,85,247,.2);color:#C084FC;">🧠 Psychologist</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="entrepreneur">
+        <div class="mentor-av" style="background:linear-gradient(135deg,var(--teal),#00967E);color:white">SJ</div>
+        <div class="mentor-name">Sivaji</div>
+        <div class="mentor-inst">IIMV Graduate</div>
+        <div class="mentor-role">Entrepreneur &amp; Business Strategist · Mentor to early-stage founders and young innovators across India</div>
+        <span class="mentor-type" style="background:rgba(0,184,169,.2);color:var(--teal);">🚀 Entrepreneur</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="professor">
+        <div class="mentor-av" style="background:linear-gradient(135deg,#0A66C2,#004182);color:white">JM</div>
+        <div class="mentor-name">James</div>
+        <div class="mentor-inst">IIMS · PhD Scholar</div>
+        <div class="mentor-role">Research Scholar &amp; Educator · Management sciences, innovation ecosystems, and youth leadership programs</div>
+        <span class="mentor-type" style="background:rgba(10,102,194,.2);color:#60A5FA;">🎓 Academia</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="entrepreneur">
+        <div class="mentor-av" style="background:linear-gradient(135deg,var(--fire),var(--rose));color:white">AK</div>
+        <div class="mentor-name">Ankith</div>
+        <div class="mentor-inst">Dehradun · IIM Trained</div>
+        <div class="mentor-role">Entrepreneur &amp; Startup Ecosystem Builder · Specialises in youth entrepreneurship and grassroots innovation models</div>
+        <span class="mentor-type" style="background:rgba(255,107,44,.2);color:#FB923C;">🚀 Entrepreneur</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="entrepreneur">
+        <div class="mentor-av" style="background:linear-gradient(135deg,#F59E0B,#D97706);color:var(--ink)">BK</div>
+        <div class="mentor-name">Bhaskar</div>
+        <div class="mentor-inst">Serial Entrepreneur</div>
+        <div class="mentor-role">Venture Builder &amp; Business Mentor · Multiple successful exits and a strong track record in small &amp; medium enterprise creation</div>
+        <span class="mentor-type" style="background:rgba(245,158,11,.2);color:#FCD34D;">🚀 Entrepreneur</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="entrepreneur">
+        <div class="mentor-av" style="background:linear-gradient(135deg,#10B981,#059669);color:white">JP</div>
+        <div class="mentor-name">Joel</div>
+        <div class="mentor-inst">Entrepreneur &amp; Innovator</div>
+        <div class="mentor-role">Impact Entrepreneur · Social enterprise leader focused on education, skill development, and community innovation for underserved youth</div>
+        <span class="mentor-type" style="background:rgba(16,185,129,.2);color:#34D399;">🌍 Social Impact</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="entrepreneur">
+        <div class="mentor-av" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white">SK</div>
+        <div class="mentor-name">Sandeep</div>
+        <div class="mentor-inst">Growth Entrepreneur</div>
+        <div class="mentor-role">Startup Growth Expert &amp; Mentor · Specialises in go-to-market strategies, B2B sales, and building founder mindsets from school age onwards</div>
+        <span class="mentor-type" style="background:rgba(139,92,246,.2);color:#A78BFA;">🚀 Entrepreneur</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="speaker entrepreneur">
+        <div class="mentor-av" style="background:linear-gradient(135deg,var(--rose),#BE123C);color:white">AW</div>
+        <div class="mentor-name">Aswathi</div>
+        <div class="mentor-inst">TEDx Speaker · Entrepreneur</div>
+        <div class="mentor-role">Entrepreneur &amp; TEDx Speaker · Advocate for women in entrepreneurship and youth leadership. Inspires thousands through talks and mentoring programs</div>
+        <span class="mentor-type" style="background:rgba(244,63,94,.2);color:#FB7185;">🎤 Speaker</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="professor">
+        <div class="mentor-av" style="background:linear-gradient(135deg,#0F766E,#134E4A);color:white">RV</div>
+        <div class="mentor-name">Dr. Ravi Varma</div>
+        <div class="mentor-inst">PhD · Business Professor</div>
+        <div class="mentor-role">Professor &amp; Business Consultant · Management education expert with 20+ years of academic and consulting experience across India and internationally</div>
+        <span class="mentor-type" style="background:rgba(15,118,110,.2);color:#2DD4BF;">🎓 Professor</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="entrepreneur">
+        <div class="mentor-av" style="background:linear-gradient(135deg,#D97706,#92400E);color:white">SV</div>
+        <div class="mentor-name">Sudheer Varma</div>
+        <div class="mentor-inst">Business Entrepreneur</div>
+        <div class="mentor-role">Serial Entrepreneur &amp; Business Advisor · Builds and scales businesses in retail, technology, and services. Mentor to young founders across Andhra &amp; Telangana</div>
+        <span class="mentor-type" style="background:rgba(217,119,6,.2);color:#FCD34D;">🚀 Entrepreneur</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+      <div class="mentor-card reveal" data-type="engineer">
+        <div class="mentor-av" style="background:linear-gradient(135deg,#1D4ED8,#1E3A8A);color:white">PU</div>
+        <div class="mentor-name">Pavan</div>
+        <div class="mentor-inst">UI Engineer · USA</div>
+        <div class="mentor-role">Senior UI Engineer based in the USA · Expertise in front-end engineering, product design, and mentoring young tech talents on global tech careers</div>
+        <span class="mentor-type" style="background:rgba(29,78,216,.2);color:#93C5FD;">💻 Engineer</span>
+        <div class="mentor-links">
+          <a href="https://linkedin.com" target="_blank" class="mentor-lnk">in LinkedIn</a>
+          <a href="mailto:mentor@theaspirekids.in" class="mentor-lnk">✉ Email</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mentor-join-box reveal">
+      <h3>🌟 Are You a Mentor? Join Our Network.</h3>
+      <p>We are constantly expanding our mentor network across all industries and geographies. If you've built something, led something, or experienced the professional world — your story can change a child's life. We welcome colour-job holders, entrepreneurs, investors, freelancers, business professionals, and anyone with a real story to share.</p>
+      <a href="#contact" onclick="openModal('mentor')" class="btn btn-sun">✨ Apply to Be a Mentor</a>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--white)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="#0A0518"><path d="M0,32 C360,0 1080,64 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     FOUNDER'S NOTE
+══════════════════════════════════════════════ -->
+<section class="section founder-section" id="founder">
+  <div class="inner">
+    <div class="founder-grid">
+      <div>
+        <div class="founder-card">
+          <div class="founder-av">TK</div>
+          <div class="founder-name">Tarun K Karanam</div>
+          <div class="founder-title">Founder &amp; Chief Aspirer<br>The Aspire Kids</div>
+          <div class="founder-links">
+            <a href="https://linkedin.com" target="_blank" class="founder-lnk">🔗 LinkedIn</a>
+            <a href="mailto:tarun@theaspirekids.in" class="founder-lnk">✉ Email</a>
+          </div>
+          <div class="founder-meta">
+            <div class="founder-meta-item">
+              <div class="founder-meta-label">Mission</div>
+              <div class="founder-meta-val">Build 1 Million future-ready kids by 2030</div>
+            </div>
+            <div class="founder-meta-item">
+              <div class="founder-meta-label">Background</div>
+              <div class="founder-meta-val">Entrepreneur · Educator · Hydroponics STEM Innovator · Innovation Catalyst</div>
+            </div>
+            <div class="founder-meta-item">
+              <div class="founder-meta-label">Current</div>
+              <div class="founder-meta-val">District Career &amp; Mental Health Counsellor · Kakinada District</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="founder-note reveal">
+        <span class="sec-label" style="background:var(--fire-l);color:var(--fire-d);">✍️ Founder's Note</span>
+        <div class="founder-quote">"I didn't build The Aspire Kids for children who already know what they want. I built it for every child who hasn't been asked yet."</div>
+        <p class="founder-text">Growing up, I watched brilliant kids around me fade — not because they lacked intelligence, but because nobody ever showed them what was possible beyond a textbook. Nobody asked them what problem they wanted to solve. Nobody told them their idea mattered. <strong>That silence is what I'm fighting against.</strong></p>
+        <p class="founder-text">We are entering the most extraordinary and the most disorienting era in human history. Artificial Intelligence is rewriting industries overnight. Jobs that exist today may not exist in five years. And yet, most of our children are still being evaluated on their ability to memorise and reproduce information on a question paper. <strong>That is not education. That is a disservice to every child who deserves more.</strong></p>
+        <p class="founder-text">The Aspire Kids is my answer. It is a movement that believes every child — regardless of their family background, city, or school — deserves access to world-class thinking, real mentors, and the skills to build their own future. Not to fit into the world as it is. <strong>But to redesign it as it should be.</strong></p>
+        <p class="founder-text">As a District Career and Mental Health Counsellor, I see every day what happens when children grow up without direction. The anxiety, the peer pressure, the depression, the wasted talent. <strong>The Aspire Kids is my professional conviction converted into action.</strong></p>
+        <p class="founder-text">To every parent who wonders if their child has what it takes — <strong>they do.</strong><br>To every teacher who wants more for their students — <strong>we are here.</strong><br>To every school that wants to be known as the one that builds real people — <strong>let's build together.</strong><br>To every child who feels unseen — <strong>this was built for you.</strong></p>
+        <div class="founder-sig">
+          <div class="sig-name">Tarun K Karanam</div>
+          <div class="sig-role">Founder &amp; Chief Aspirer — The Aspire Kids</div>
+          <div class="sig-extra">🚀 Entrepreneur · Educator · District Counsellor · Hydroponics STEM Innovator · Believer in Children's Unlimited Potential</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--cream)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="#FFFFFF"><path d="M0,32 C360,64 1080,0 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     BLOG
+══════════════════════════════════════════════ -->
+<section class="section blog-section" id="blog">
+  <div class="inner">
+    <div class="t-center reveal" style="margin-bottom:44px">
+      <span class="sec-label" style="background:var(--grape-l);color:var(--grape-d);">📝 From Our Blog</span>
+      <h2 class="sec-title">Ideas Worth<br>Reading</h2>
+      <p class="sec-desc">Thoughts on raising future-ready kids, the AI world, entrepreneurship education, mental health, and what schools of tomorrow actually look like.</p>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card reveal" style="transition-delay:.1s">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#FFF3C4,#FFD454)">🤖</div>
+        <div class="blog-body">
+          <div class="blog-cat">AI &amp; Future Skills</div>
+          <div class="blog-title">Is Your Child AI-Ready? 5 Skills Schools Are Not Teaching</div>
+          <div class="blog-excerpt">Artificial Intelligence isn't coming — it's here. The gap between children who understand it and those who don't will define the next generation's economy. Here's what they actually need to learn.</div>
+          <div class="blog-meta"><span class="blog-read">5 min read →</span><span class="blog-date">May 2025</span></div>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="transition-delay:.15s">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#EDE9FE,#C4B5FD)">🧠</div>
+        <div class="blog-body">
+          <div class="blog-cat">Mental Health</div>
+          <div class="blog-title">Why Teen Depression Is Rising — And What Parents Can Actually Do</div>
+          <div class="blog-excerpt">Depression in children isn't just a mental health issue. It's a crisis of purpose, identity, and belonging. Here's how to address root causes, not just symptoms, starting from school itself.</div>
+          <div class="blog-meta"><span class="blog-read">7 min read →</span><span class="blog-date">April 2025</span></div>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="transition-delay:.2s">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#D0F5F2,#5DCAA5)">💰</div>
+        <div class="blog-body">
+          <div class="blog-cat">Financial Literacy</div>
+          <div class="blog-title">Why Every 10-Year-Old Should Know What a Profit Margin Is</div>
+          <div class="blog-excerpt">Financial literacy is the most underrated skill in children's education. Teaching kids about money early transforms their entire relationship with ambition, risk, and the world of business.</div>
+          <div class="blog-meta"><span class="blog-read">4 min read →</span><span class="blog-date">March 2025</span></div>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="transition-delay:.25s">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#FFE9DC,#FFB094)">🚀</div>
+        <div class="blog-body">
+          <div class="blog-cat">Entrepreneurship</div>
+          <div class="blog-title">Before You Build a Business, You Must First Build a Builder's Mind</div>
+          <div class="blog-excerpt">The Kidpreneurship philosophy in practice: why self-discovery comes before business building, and how 10 days of real-world surveys changed 500+ children's sense of purpose forever.</div>
+          <div class="blog-meta"><span class="blog-read">6 min read →</span><span class="blog-date">Feb 2025</span></div>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="transition-delay:.3s">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#FFF7DC,#FFC837)">📚</div>
+        <div class="blog-body">
+          <div class="blog-cat">NEP 2020</div>
+          <div class="blog-title">NEP 2020 Calls for Life Skills. Here's a School That Listened.</div>
+          <div class="blog-excerpt">India's National Education Policy calls for experiential learning and entrepreneurial skills from foundational years. Here's how one school partnership with The Aspire Kids made it a reality.</div>
+          <div class="blog-meta"><span class="blog-read">5 min read →</span><span class="blog-date">Jan 2025</span></div>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="transition-delay:.35s">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,#E0F2FE,#7DD3FC)">🎤</div>
+        <div class="blog-body">
+          <div class="blog-cat">Communication</div>
+          <div class="blog-title">From Terrified Whispers to Confident Presenters — The Speech Craft Story</div>
+          <div class="blog-excerpt">How a 12-year-old who never raised her hand in class delivered a 90-second pitch to 200 people at our Demo Day — and what it took to get her there. The inside story of Speech Craft.</div>
+          <div class="blog-meta"><span class="blog-read">4 min read →</span><span class="blog-date">Dec 2024</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="t-center" style="margin-top:38px">
+      <a href="#contact" onclick="openModal('collab')" class="btn btn-navy reveal">📰 Read All Articles</a>
+    </div>
+  </div>
+</section>
+
+<div class="wave" style="background:var(--white)"><svg viewBox="0 0 1440 64" preserveAspectRatio="none" fill="var(--cream)"><path d="M0,32 C360,0 1080,64 1440,32 L1440,64 L0,64Z"/></svg></div>
+
+<!-- ══════════════════════════════════════════════
+     SOCIAL
+══════════════════════════════════════════════ -->
+<section class="social-section" id="social">
+  <div class="inner">
+    <div class="t-center reveal">
+      <span class="sec-label" style="background:var(--fire-l);color:var(--fire-d);">🌍 Follow Along</span>
+      <h2 class="sec-title">Join the Aspire Kids<br><span style="color:var(--fire)">Movement</span></h2>
+      <p class="sec-desc">Share your kids' creations, get weekly activity ideas, and connect with young entrepreneurs across India. Tag us with <strong>#TheAspireKids</strong></p>
+    </div>
+    <div class="social-grid">
+      <a href="https://instagram.com/theaspirekids" target="_blank" class="soc s-ig reveal" style="transition-delay:.1s"><div class="soc-icon-wrap">📸</div><div class="soc-name">Instagram</div><div class="soc-handle">@theaspirekids</div><button class="soc-btn">Follow</button></a>
+      <a href="https://youtube.com/@theaspirekids" target="_blank" class="soc s-yt reveal" style="transition-delay:.2s"><div class="soc-icon-wrap">▶️</div><div class="soc-name">YouTube</div><div class="soc-handle">@TheAspireKids</div><button class="soc-btn">Subscribe</button></a>
+      <a href="https://linkedin.com/company/theaspirekids" target="_blank" class="soc s-li reveal" style="transition-delay:.3s"><div class="soc-icon-wrap">💼</div><div class="soc-name">LinkedIn</div><div class="soc-handle">The Aspire Kids</div><button class="soc-btn">Follow</button></a>
+      <a href="https://facebook.com/theaspirekids" target="_blank" class="soc s-fb reveal" style="transition-delay:.4s"><div class="soc-icon-wrap">👥</div><div class="soc-name">Facebook</div><div class="soc-handle">The Aspire Kids</div><button class="soc-btn">Like Page</button></a>
+      <a href="https://wa.me/919999999999" target="_blank" class="soc s-wa reveal" style="transition-delay:.5s"><div class="soc-icon-wrap">💬</div><div class="soc-name">WhatsApp</div><div class="soc-handle">Community Group</div><button class="soc-btn">Join</button></a>
+    </div>
+    <div class="t-center reveal" style="margin-top:32px">
+      <div style="display:flex;gap:9px;justify-content:center;flex-wrap:wrap">
+        <span style="background:var(--white);border:2px solid var(--border);border-radius:50px;padding:7px 18px;font-weight:800;color:var(--fire);font-size:.9rem;box-shadow:var(--shadow-sm)">#TheAspireKids</span>
+        <span style="background:var(--white);border:2px solid var(--border);border-radius:50px;padding:7px 18px;font-weight:800;color:var(--teal);font-size:.9rem;box-shadow:var(--shadow-sm)">#Kidpreneur</span>
+        <span style="background:var(--white);border:2px solid var(--border);border-radius:50px;padding:7px 18px;font-weight:800;color:var(--grape);font-size:.9rem;box-shadow:var(--shadow-sm)">#KidpreThePreneurCentre</span>
+        <span style="background:var(--white);border:2px solid var(--border);border-radius:50px;padding:7px 18px;font-weight:800;color:var(--rose);font-size:.9rem;box-shadow:var(--shadow-sm)">#FutureReady</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="nl-section" id="newsletter">
+  <div class="inner nl-inner reveal">
+    <div class="nl-title">Stay in the Loop 🎁</div>
+    <p class="nl-sub">Get free activity ideas, early book access, school program updates, and workshop announcements — straight to your inbox. 1–2 emails per month, no spam ever.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="your@email.com" id="nlEmail">
+      <button class="nl-submit" onclick="doSubscribe()">Subscribe Free →</button>
+    </div>
+    <div id="nlMsg"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<div class="footer-zigzag"></div>
+<footer id="contact">
+  <div class="footer-grid">
+    <div>
+      <div class="f-brand">🚀 The Aspire Kids</div>
+      <p class="f-desc">An ecosystem for young changemakers aged 6–16 — featuring a book series, school Kidpreneurship Centres, FabLabs, global mentors, and workshops. Where young ideas come alive and future leaders are forged.</p>
+      <p style="font-size:.82rem;color:rgba(255,255,255,.38);margin-top:12px;line-height:1.7">📧 hello@theaspirekids.in<br>🌐 www.theaspirekids.com<br>📍 Kakinada, Andhra Pradesh, India</p>
+      <div class="f-social">
+        <a class="f-icon" href="https://instagram.com/theaspirekids" target="_blank">📸</a>
+        <a class="f-icon" href="https://youtube.com/@theaspirekids" target="_blank">▶️</a>
+        <a class="f-icon" href="https://linkedin.com/company/theaspirekids" target="_blank">💼</a>
+        <a class="f-icon" href="https://facebook.com/theaspirekids" target="_blank">👥</a>
+        <a class="f-icon" href="https://wa.me/919999999999" target="_blank">💬</a>
+      </div>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Books</div>
+      <ul>
+        <li><a href="https://claude.ai/public/artifacts/6c20f9f2-e228-4375-ab9d-b9d2d439f408" target="_blank">Read Kidpreneur Free</a></li>
+        <li><a href="#books" onclick="openModal('print')">Order Print Copy</a></li>
+        <li><a href="#books" onclick="openModal('bulk')">Bulk / School Orders</a></li>
+        <li><a href="#bookseries">Full Book Series</a></li>
+        <li><a href="#newsletter">Book Launch Alerts</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Schools</div>
+      <ul>
+        <li><a href="#schools">Kidpreneur Centre</a></li>
+        <li><a href="#schools">Tinker Lab Setup</a></li>
+        <li><a href="#schools">Career Counselling</a></li>
+        <li><a href="#schools">Psychologist Support</a></li>
+        <li><a href="#schools">Teacher Training</a></li>
+        <li><a href="#exposure">Exposure Visits</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Workshops</div>
+      <ul>
+        <li><a href="#workshops">Idea Spark</a></li>
+        <li><a href="#workshops">Tinker Space</a></li>
+        <li><a href="#workshops">Demo Day Studio</a></li>
+        <li><a href="#workshops">FabLab Session</a></li>
+        <li><a href="#workshops">Pitch Camp</a></li>
+        <li><a href="#workshops">The Money Game</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <div class="f-col-title">Connect</div>
+      <ul>
+        <li><a href="#mentors">Global Mentors</a></li>
+        <li><a href="#blog">Blog</a></li>
+        <li><a href="#founder">About the Founder</a></li>
+        <li><a href="#contact" onclick="openModal('collab')">Partner With Us</a></li>
+        <li><a href="mailto:hello@theaspirekids.in">hello@theaspirekids.in</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 The Aspire Kids. All rights reserved. Made with ❤️ for the next generation of builders.</span>
+    <span>Founded by <strong style="color:rgba(255,255,255,.45)">Tarun K Karanam</strong></span>
+  </div>
+</footer>
+
+<!-- STICKY BAR -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="sb-info">
+    <strong>📚 The Aspire Kids — Books, Workshops &amp; School Programs Now Open!</strong>
+    <p>Partner with us or read the Kidpreneur book free online today</p>
+  </div>
+  <div style="display:flex;gap:9px;flex-wrap:wrap">
+    <a href="https://claude.ai/public/artifacts/6c20f9f2-e228-4375-ab9d-b9d2d439f408" target="_blank" class="btn btn-secondary" style="padding:9px 18px;font-size:.86rem">📖 Read Free Online</a>
+    <button class="btn btn-primary" style="padding:9px 18px;font-size:.86rem" onclick="openModal('school')">🏫 Partner School</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     CONTACT MODAL
+══════════════════════════════════════════════ -->
+<div class="overlay" id="overlay" onclick="closeOnBg(event)">
+  <div class="modal">
+    <div class="modal-head" id="modalHead" style="background:linear-gradient(135deg,var(--fire),var(--rose))">
+      <button class="m-close" onclick="closeModal()">✕</button>
+      <div class="modal-title" id="mTitle">Get In Touch</div>
+      <div class="modal-sub" id="mSub">We'd love to hear from you!</div>
+    </div>
+    <div id="contactForm">
+      <div class="modal-body">
+        <div class="field field-2">
+          <div><label>First Name</label><input type="text" id="fName" placeholder="Priya"></div>
+          <div><label>Last Name</label><input type="text" id="lName" placeholder="Sharma"></div>
+        </div>
+        <div class="field"><label>Email Address</label><input type="email" id="fEmail" placeholder="priya@school.edu"></div>
+        <div class="field"><label>Phone / WhatsApp</label><input type="text" id="fPhone" placeholder="+91 99999 99999"></div>
+        <div class="field"><label>Organisation / School Name</label><input type="text" id="fOrg" placeholder="Little Stars Academy, Hyderabad"></div>
+        <div class="field">
+          <label>I'm Interested In</label>
+          <select id="fInt">
+            <option value="">Select your interest...</option>
+            <option>🏫 School Partnership / Kidpreneur Centre</option>
+            <option>⚙️ FabLab / Tinker Lab Setup</option>
+            <option>🎓 Career Counselling Services</option>
+            <option>🧠 Psychologist Support for School</option>
+            <option>🎪 Booking a Workshop</option>
+            <option>📖 Print Book Copy</option>
+            <option>📦 Bulk / Classroom Book Order</option>
+            <option>🌐 Join the Mentor Network</option>
+            <option>🌍 Exposure Visit Programme</option>
+            <option>🤝 General Partnership / Collaboration</option>
+            <option>📬 Book Series Launch Notifications</option>
+          </select>
+        </div>
+        <div class="field"><label>Message</label><textarea id="fMsg" rows="3" placeholder="Tell us a bit about what you're looking for and how we can help..."></textarea></div>
+        <button class="modal-submit" onclick="submitContact()">🚀 Send Message</button>
+        <p style="text-align:center;font-size:.72rem;color:var(--muted);margin-top:10px;font-weight:700">We reply within 24 hours · hello@theaspirekids.in · Your details are safe with us</p>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="suc-icon">✓</div>
+      <div class="suc-title">Message Sent! 🎉</div>
+      <p class="suc-msg">Thank you for reaching out! Our team at The Aspire Kids will get back to you within 24 hours. In the meantime, explore the Kidpreneur book online for free — and start dreaming big!</p>
+      <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <a href="https://claude.ai/public/artifacts/6c20f9f2-e228-4375-ab9d-b9d2d439f408" target="_blank" class="btn btn-teal" style="padding:11px 22px;font-size:.88rem">📖 Read the Book →</a>
+        <button onclick="closeModal()" class="btn btn-secondary" style="padding:11px 22px;font-size:.88rem">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════ -->
+<script>
+/* ── CUSTOM CURSOR ── */
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.format-card,.ws-card,.prog-card,.mentor-card,.exp-card,.blog-card,.s-book-card,.delivery-card,.fab-card-s,.ss-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';curR.style.width='52px';curR.style.height='52px'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='12px';cur.style.height='12px';curR.style.width='36px';curR.style.height='36px'});
+});
+
+/* ── NAV & STICKY ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',scrollY>20);
+  document.getElementById('stickyBar').classList.toggle('show',scrollY>600);
+});
+document.getElementById('ham').onclick=()=>document.getElementById('mobNav').classList.toggle('open');
+
+/* ── SCROLL REVEAL ── */
+const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── MENTOR FILTER ── */
+function filterMentors(type, btn){
+  document.querySelectorAll('.mf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.mentor-card').forEach(card=>{
+    if(type==='all'||card.dataset.type.includes(type)){
+      card.style.display='';
+      card.style.opacity='1';
+    } else {
+      card.style.opacity='0.15';
+      card.style.transform='scale(0.96)';
+      setTimeout(()=>{if(card.style.opacity==='0.15')card.style.display='';},300);
+    }
+  });
+}
+
+/* ── MODAL CONFIG ── */
+const configs={
+  print:{grad:'linear-gradient(135deg,#FFC837,#FF6B2C)',title:'Order Print Copy 📚',sub:'Get the beautiful physical edition delivered to your door',interest:'📖 Print Book Copy'},
+  bulk:{grad:'linear-gradient(135deg,#7C3AED,#F43F5E)',title:'Bulk / Classroom Order 📦',sub:'Special pricing for schools and programs',interest:'📦 Bulk / Classroom Book Order'},
+  school:{grad:'linear-gradient(135deg,#00B8A9,#0070F3)',title:'School Partnership 🏫',sub:'Let\'s establish a Kidpreneurship Centre or FabLab at your school',interest:'🏫 School Partnership / Kidpreneur Centre'},
+  fablab:{grad:'linear-gradient(135deg,#7C3AED,#0070F3)',title:'Setup a FabLab ⚙️',sub:'Bring hands-on fabrication and making to your school',interest:'⚙️ FabLab / Tinker Lab Setup'},
+  mentor:{grad:'linear-gradient(135deg,#FFC837,#FF6B2C)',title:'Join Our Mentor Network 🌐',sub:'Share your real-world experience with the next generation',interest:'🌐 Join the Mentor Network'},
+  collab:{grad:'linear-gradient(135deg,#FFC837,#FF6B2C)',title:'Partner With Us 🤝',sub:'Let\'s build something extraordinary together for India\'s children',interest:'🤝 General Partnership / Collaboration'},
+  'ws-idea':{grad:'linear-gradient(135deg,#FFC837,#FF6B2C)',title:'Book: Idea Spark 💡',sub:'Book an Idea Spark workshop for your school or group',interest:'🎪 Booking a Workshop'},
+  'ws-tinker':{grad:'linear-gradient(135deg,#00B8A9,#00967E)',title:'Book: Tinker Space 🔨',sub:'Book a Design Thinking workshop for your students',interest:'🎪 Booking a Workshop'},
+  'ws-demo':{grad:'linear-gradient(135deg,#FF6B2C,#F43F5E)',title:'Book: Demo Day Studio 🎬',sub:'Bring the Silicon Valley Demo Day to your school',interest:'🎪 Booking a Workshop'},
+  'ws-fab':{grad:'linear-gradient(135deg,#7C3AED,#0070F3)',title:'Book: FabLab Session 🏭',sub:'Hands-on making and fabrication for your students',interest:'🎪 Booking a Workshop'},
+  'ws-pitch':{grad:'linear-gradient(135deg,#F43F5E,#FFC837)',title:'Book: Pitch Camp 🎤',sub:'A 2–3 day intensive pitching and startup camp',interest:'🎪 Booking a Workshop'},
+  'ws-money':{grad:'linear-gradient(135deg,#2ECC71,#00B8A9)',title:'Book: The Money Game 🎲',sub:'A financial literacy simulation day for your students',interest:'🎪 Booking a Workshop'},
+};
+
+function openModal(type){
+  const c=configs[type]||configs.collab;
+  document.getElementById('modalHead').style.background=c.grad;
+  document.getElementById('mTitle').textContent=c.title;
+  document.getElementById('mSub').textContent=c.sub;
+  if(c.interest){
+    const sel=document.getElementById('fInt');
+    const opt=[...sel.options].find(o=>o.value===c.interest);
+    if(opt) sel.value=c.interest;
+  }
+  document.getElementById('contactForm').style.display='';
+  document.getElementById('modalSuccess').classList.remove('show');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+function closeOnBg(e){if(e.target===document.getElementById('overlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+function submitContact(){
+  const fn=document.getElementById('fName').value.trim();
+  const em=document.getElementById('fEmail').value.trim();
+  if(!fn){shake('fName');return}
+  if(!em||!em.includes('@')){shake('fEmail');return}
+  const btn=document.querySelector('.modal-submit');
+  btn.innerHTML='⏳ Sending...';btn.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('contactForm').style.display='none';
+    document.getElementById('modalSuccess').classList.add('show');
+  },1800);
+}
+function shake(id){const el=document.getElementById(id);el.style.borderColor='var(--rose)';el.style.animation='shake .35s ease';setTimeout(()=>{el.style.animation='';el.style.borderColor=''},600)}
+
+/* ── NEWSLETTER ── */
+function doSubscribe(){
+  const em=document.getElementById('nlEmail').value;
+  const msg=document.getElementById('nlMsg');
+  if(!em||!em.includes('@')){msg.style.display='block';msg.textContent='⚠️ Please enter a valid email!';return}
+  msg.style.display='block';
+  msg.textContent='🎉 You\'re in! Welcome to The Aspire Kids community — watch your inbox for something special!';
+  document.getElementById('nlEmail').value='';
+}
+
+/* ── ADD SHAKE KEYFRAME ── */
+const s=document.createElement('style');
+s.textContent='@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}';
+document.head.appendChild(s);
+</script>
+</body>
+</html>
